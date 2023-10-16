@@ -45,4 +45,13 @@ public class DirectorServiceImpl implements DirectorService {
         director.setId(existingDirector.getId());
         repository.update(director);
     }
+
+    @Override
+    public void delete(int id) {
+        Director director = repository.findById(id);
+        if (director == null) {
+            throw new ResourceNotFoundException("Director not found with id: " + id);
+        }
+        repository.delete(id);
+    }
 }

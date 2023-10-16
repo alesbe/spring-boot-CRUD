@@ -126,4 +126,14 @@ public class DirectorRepositoryImpl implements DirectorRepository {
             throw new RuntimeException();
         }
     }
+
+    public void delete(int id) {
+        final String SQL = "DELETE FROM directors WHERE id = ?";
+        try (Connection connection = DBUtil.open()){
+            DBUtil.delete(connection, SQL, List.of(id));
+            DBUtil.close(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 }

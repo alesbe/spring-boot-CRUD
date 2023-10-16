@@ -45,4 +45,13 @@ public class ActorServiceImpl implements ActorService {
         actor.setId(existingActor.getId());
         repository.update(actor);
     }
+
+    @Override
+    public void delete(int id) {
+        Actor actor = repository.findById(id);
+        if (actor == null) {
+            throw new ResourceNotFoundException("Actor not found with id: " + id);
+        }
+        repository.delete(id);
+    }
 }

@@ -12,4 +12,5 @@ public interface ActorRepository {
     public int insert(Actor actor);
     public int countAll();
     public void update(Actor actor);
+    public void delete(int id);
 }

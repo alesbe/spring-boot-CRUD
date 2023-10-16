@@ -127,4 +127,14 @@ public class ActorRepositoryImpl implements ActorRepository {
             throw new RuntimeException();
         }
     }
+
+    public void delete(int id) {
+        final String SQL = "DELETE FROM actors WHERE id = ?";
+        try (Connection connection = DBUtil.open()){
+            DBUtil.delete(connection, SQL, List.of(id));
+            DBUtil.close(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 }

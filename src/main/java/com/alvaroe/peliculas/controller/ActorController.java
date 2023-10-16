@@ -49,4 +49,10 @@ public class ActorController {
     public void update(@PathVariable("id") int id, @RequestBody Actor actor) {
         service.update(id, actor);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id) {
+        service.delete(id);
+    }
 }

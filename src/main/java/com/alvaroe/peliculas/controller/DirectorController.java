@@ -52,4 +52,10 @@ public class DirectorController {
     public void update(@PathVariable("id") int id, @RequestBody Director director) {
         service.update(id, director);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id) {
+        service.delete(id);
+    }
 }
