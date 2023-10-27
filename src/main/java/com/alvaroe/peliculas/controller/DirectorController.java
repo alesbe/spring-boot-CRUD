@@ -1,7 +1,10 @@
 package com.alvaroe.peliculas.controller;
 
 import com.alvaroe.peliculas.controller.model.actor.ActorListWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorCreateWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorDetailWeb;
 import com.alvaroe.peliculas.controller.model.director.DirectorListWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Director;
 import com.alvaroe.peliculas.domain.entity.Movie;
@@ -54,10 +57,15 @@ public class DirectorController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public Director create(@RequestBody Director director){
-        int id = service.create(director);
-        director.setId(id);
-        return director;
+    public Response create(@RequestBody DirectorCreateWeb directorCreateWeb){
+        int id = service.create(DirectorMapper.mapper.toDirector(directorCreateWeb));
+        DirectorDetailWeb directorDetailWeb = new DirectorDetailWeb(
+                id,
+                directorCreateWeb.getName(),
+                directorCreateWeb.getBirthYear(),
+                directorCreateWeb.getDeathYear()
+        );
+        return Response.builder().data(directorDetailWeb).build();
     }
 
     @GetMapping("/{id}")
@@ -68,8 +76,9 @@ public class DirectorController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") int id, @RequestBody Director director) {
-        service.update(id, director);
+    public void update(@PathVariable("id") int id, @RequestBody DirectorUpdateWeb directorUpdateWeb) {
+        directorUpdateWeb.setId(id);
+        service.update(DirectorMapper.mapper.toDirector(directorUpdateWeb));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

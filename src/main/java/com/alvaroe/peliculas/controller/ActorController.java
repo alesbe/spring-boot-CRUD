@@ -1,6 +1,12 @@
 package com.alvaroe.peliculas.controller;
 
+import com.alvaroe.peliculas.controller.model.actor.ActorCreateWeb;
+import com.alvaroe.peliculas.controller.model.actor.ActorDetailWeb;
 import com.alvaroe.peliculas.controller.model.actor.ActorListWeb;
+import com.alvaroe.peliculas.controller.model.actor.ActorUpdateWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorCreateWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorDetailWeb;
+import com.alvaroe.peliculas.controller.model.director.DirectorUpdateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Director;
@@ -9,6 +15,7 @@ import com.alvaroe.peliculas.domain.service.ActorService;
 import com.alvaroe.peliculas.domain.service.DirectorService;
 import com.alvaroe.peliculas.http_response.Response;
 import com.alvaroe.peliculas.mapper.ActorMapper;
+import com.alvaroe.peliculas.mapper.DirectorMapper;
 import com.alvaroe.peliculas.mapper.MovieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,10 +57,15 @@ public class ActorController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public Actor create(@RequestBody Actor actor){
-        int id = service.create(actor);
-        actor.setId(id);
-        return actor;
+    public Response create(@RequestBody ActorCreateWeb actorCreateWeb){
+        int id = service.create(ActorMapper.mapper.toActor(actorCreateWeb));
+        ActorDetailWeb actorDetailWeb = new ActorDetailWeb(
+                id,
+                actorCreateWeb.getName(),
+                actorCreateWeb.getBirthYear(),
+                actorCreateWeb.getDeathYear()
+        );
+        return Response.builder().data(actorDetailWeb).build();
     }
 
     @GetMapping("/{id}")
@@ -64,8 +76,9 @@ public class ActorController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") int id, @RequestBody Actor actor) {
-        service.update(id, actor);
+    public void update(@PathVariable("id") int id, @RequestBody ActorUpdateWeb actorUpdateWeb) {
+        actorUpdateWeb.setId(id);
+        service.update(ActorMapper.mapper.toActor(actorUpdateWeb));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

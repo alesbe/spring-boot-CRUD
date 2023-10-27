@@ -11,6 +11,6 @@ public interface DirectorService {
     public Director findById(int id);
     public int create(Director director);
     public int countAll();
-    public void update(int id, Director director);
+    public void update(Director director);
     public void delete(int id);
 }

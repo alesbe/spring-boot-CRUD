@@ -12,6 +12,6 @@ public interface ActorService {
     public Actor findById(int id);
     public int create(Actor actor);
     public int countAll();
-    public void update(int id, Actor actor);
+    public void update(Actor actor);
     public void delete(int id);
 }

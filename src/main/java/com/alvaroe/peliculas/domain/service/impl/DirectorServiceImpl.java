@@ -37,10 +37,10 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public void update(int id, Director director) {
-        Director existingDirector = repository.findById(id);
+    public void update(Director director) {
+        Director existingDirector = repository.findById(director.getId());
         if (existingDirector == null) {
-            throw new ResourceNotFoundException("Director not found with id: " + id);
+            throw new ResourceNotFoundException("Director not found with id: " + director.getId());
         }
         director.setId(existingDirector.getId());
         repository.update(director);

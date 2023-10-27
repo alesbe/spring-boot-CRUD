@@ -37,10 +37,10 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void update(int id, Actor actor) {
-        Actor existingActor = repository.findById(id);
+    public void update(Actor actor) {
+        Actor existingActor = repository.findById(actor.getId());
         if (existingActor == null) {
-            throw new ResourceNotFoundException("Actor not found with id: " + id);
+            throw new ResourceNotFoundException("Actor not found with id: " + actor.getId());
         }
         actor.setId(existingActor.getId());
         repository.update(actor);
