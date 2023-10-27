@@ -1,37 +1,40 @@
 package com.alvaroe.peliculas.http_response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
 @Setter
+@JsonPropertyOrder({ "totalRecords", "pagination", "data"})
+@JsonInclude(JsonInclude.Include.NON_NULL) // No incluirá atributos nulos en el JSON
+@Builder
 public class Response {
 
     private Object data;
+
     private Integer totalRecords;
-    private Integer page;
-    private Integer pageSize;
-    private Integer totalPages;
-    private String next;
-    private String previous;
 
-    public Response(Object data, int totalRecords, Optional<Integer> page, int pageSize) {
-        this.data = data;
-        this.totalRecords = totalRecords;
-        if (page.isPresent())
-            buildPaginationMetaData(totalRecords, pageSize, page.get());
-    }
+    @JsonProperty("PaginationData")
+    private Map<String, Object> pagination;
 
-    private void buildPaginationMetaData(int totalRecords, int pageSize, int page) {
-        this.page = page;
-        this.pageSize = pageSize;
+
+    public void paginate(int page, int pageSize, String url) {
+        this.pagination = new HashMap<>();
+        this.pagination.put("page", page);
+        this.pagination.put("page size", pageSize);
         int totalPages = (int) (Math.ceil((double) totalRecords / pageSize));
-        this.totalPages = totalPages;
-
+        this.pagination.put("total pages", totalPages);
         if (page > 1 && totalPages > 1)
-            this.previous = "/movies?page=" + (page - 1);
+            this.pagination.put("previous", url + "/movies?page=" + (page - 1));
         if (page < totalPages)
-            this.next = "/movies?page=" + (page + 1);
+            this.pagination.put("next", url + "/movies?page=" + (page + 1));
     }
 }
