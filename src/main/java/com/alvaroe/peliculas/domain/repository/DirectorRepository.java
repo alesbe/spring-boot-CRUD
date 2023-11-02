@@ -1,4 +1,4 @@
-package com.alvaroe.peliculas.persistance;
+package com.alvaroe.peliculas.domain.repository;
 
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Director;

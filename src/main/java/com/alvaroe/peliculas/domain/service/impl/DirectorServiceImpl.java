@@ -1,10 +1,9 @@
 package com.alvaroe.peliculas.domain.service.impl;
 
-import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Director;
 import com.alvaroe.peliculas.domain.service.DirectorService;
 import com.alvaroe.peliculas.exception.ResourceNotFoundException;
-import com.alvaroe.peliculas.persistance.DirectorRepository;
+import com.alvaroe.peliculas.domain.repository.DirectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

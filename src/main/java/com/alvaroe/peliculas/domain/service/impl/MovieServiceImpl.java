@@ -2,8 +2,7 @@ package com.alvaroe.peliculas.domain.service.impl;
 
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.domain.service.MovieService;
-import com.alvaroe.peliculas.persistance.MovieRepository;
-import com.alvaroe.peliculas.persistance.impl.MovieRepositoryImpl;
+import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

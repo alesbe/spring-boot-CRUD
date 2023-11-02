@@ -31,15 +31,18 @@ public class ActorController {
 
     @Autowired
     ActorService service;
-    private final int LIMIT = 10;
 
     @Value("${application.url}")
     private String urlBase;
 
-    @GetMapping("")
+    @Value("${page.size}")
+    private int PAGE_SIZE;
+
     @ResponseStatus(HttpStatus.OK)
-    public Response getAll(@RequestParam(required = false) Integer page) {
-        List<Actor> actors = (page != null)? service.getAll(Optional.of(page)) : service.getAll(Optional.empty());
+    @GetMapping("")
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        pageSize = (pageSize != null)? pageSize : PAGE_SIZE;
+        List<Actor> actors = (page != null)? service.getAll(page, pageSize) : service.getAll();
         List<ActorListWeb> actorsWeb = actors.stream()
                 .map(actor -> ActorMapper.mapper.toActorListWeb(actor))
                 .toList();
@@ -50,7 +53,7 @@ public class ActorController {
                 .build();
 
         if(page != null) {
-            response.paginate(page, totalRecords, urlBase);
+            response.paginate(page, pageSize, urlBase);
         }
         return response;
     }

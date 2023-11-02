@@ -3,7 +3,7 @@ package com.alvaroe.peliculas.domain.service.impl;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.service.ActorService;
 import com.alvaroe.peliculas.exception.ResourceNotFoundException;
-import com.alvaroe.peliculas.persistance.ActorRepository;
+import com.alvaroe.peliculas.domain.repository.ActorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,22 @@ public class ActorServiceImpl implements ActorService {
     ActorRepository repository;
 
     @Override
-    public List<Actor> getAll(Optional<Integer> page) {
-        return repository.getAll(page);
+    public List<Actor> getAll(Integer page, Integer pageSize) {
+        return repository.getAll(page, pageSize);
+    }
+
+    @Override
+    public List<Actor> getAll() {
+        return repository.getAll(null, null);
     }
 
     @Override
     public Actor findById(int id) {
-        return repository.findById(id);
+
+        Actor actor = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
+
+        return actor;
     }
 
     @Override
@@ -38,20 +47,18 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void update(Actor actor) {
-        Actor existingActor = repository.findById(actor.getId());
-        if (existingActor == null) {
-            throw new ResourceNotFoundException("Actor not found with id: " + actor.getId());
-        }
-        actor.setId(existingActor.getId());
+        repository.findById(actor.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actor.getId()));
+
+
         repository.update(actor);
     }
 
     @Override
     public void delete(int id) {
-        Actor actor = repository.findById(id);
-        if (actor == null) {
-            throw new ResourceNotFoundException("Actor not found with id: " + id);
-        }
+        repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
+
         repository.delete(id);
     }
 }
