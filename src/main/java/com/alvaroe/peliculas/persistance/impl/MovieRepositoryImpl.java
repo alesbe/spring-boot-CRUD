@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Repository
 public class MovieRepositoryImpl implements MovieRepository {
-
     @Autowired
     MovieDAO movieDAO;
 
@@ -68,6 +67,24 @@ public class MovieRepositoryImpl implements MovieRepository {
         try(Connection connection = DBUtil.open(false)) {
             return movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
         } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(Movie movie) {
+        try(Connection connection = DBUtil.open(true)) {
+            movieDAO.update(connection, MovieMapper.mapper.toMovieEntity(movie));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(Movie movie) {
+        try(Connection connection = DBUtil.open(true)) {
+            movieDAO.delete(connection, MovieMapper.mapper.toMovieEntity(movie));
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

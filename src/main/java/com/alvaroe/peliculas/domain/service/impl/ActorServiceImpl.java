@@ -17,6 +17,11 @@ public class ActorServiceImpl implements ActorService {
     ActorRepository repository;
 
     @Override
+    public int create (Actor actor) {
+        return repository.insert(actor);
+    }
+
+    @Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
     }
@@ -32,11 +37,6 @@ public class ActorServiceImpl implements ActorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
 
         return actor;
-    }
-
-    @Override
-    public int create (Actor actor) {
-        return repository.insert(actor);
     }
 
     @Override

@@ -18,4 +18,6 @@ public interface MovieRepository {
     public Optional<Movie> findById(int id);
     public int countAll();
     public int insert(Movie movie);
+    public void update(Movie movie);
+    public void delete(Movie movie);
 }

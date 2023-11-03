@@ -16,6 +16,11 @@ public class DirectorServiceImpl implements DirectorService {
     DirectorRepository repository;
 
     @Override
+    public int create(Director director) {
+        return repository.insert(director);
+    }
+
+    @Override
     public List<Director> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
     }
@@ -29,11 +34,6 @@ public class DirectorServiceImpl implements DirectorService {
     public Director findById(int id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + id));
-    }
-
-    @Override
-    public int create(Director director) {
-        return repository.insert(director);
     }
 
     @Override

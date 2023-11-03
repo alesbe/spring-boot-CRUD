@@ -95,4 +95,21 @@ public class MovieDAO {
         String SQL = "INSERT INTO actors_movies (movie_id, actor_id) VALUES (?, ?)";
         DBUtil.insert(connection, SQL, List.of(movieId, actorId));
     }
+
+    public void update(Connection connection, MovieEntity movieEntity) {
+        final String SQL = "UPDATE movies SET title = ?, year = ?, runtime = ?, director_id = ? WHERE id = ?";
+
+        List<Object> params = new ArrayList<>();
+        params.add(movieEntity.getTitle());
+        params.add(movieEntity.getYear());
+        params.add(movieEntity.getRuntime());
+        params.add(movieEntity.getDirectorId());
+        params.add(movieEntity.getId());
+    }
+
+    public void delete(Connection connection, MovieEntity movieEntity) {
+        final String SQL = "DELETE FROM movies WHERE id = ?";
+
+        DBUtil.delete(connection, SQL, List.of(movieEntity.getId()));
+    }
 }

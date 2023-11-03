@@ -24,6 +24,21 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     ActorRepository actorRepository;
 
+    @Override
+    public int create(Movie movie, Integer directorId, List<Integer> actorIds) {
+        Director director = directorRepository.findById(directorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
+
+        List<Actor> actors = actorIds.stream()
+                .map(actorId -> actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
+                .toList();
+
+        movie.setDirector(director);
+        movie.setActors(actors);
+
+        return repository.insert(movie);
+    }
+
     public List<Movie> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
     }
@@ -43,17 +58,18 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public int insert(Movie movie, Integer directorId, List<Integer> actorIds) {
-        Director director = directorRepository.findById(directorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
+    public void update(Movie movie) {
+        repository.findById(movie.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + movie.getId()));
 
-        List<Actor> actors = actorIds.stream()
-                .map(actorId -> actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
-                .toList();
+        repository.update(movie);
+    }
 
-        movie.setDirector(director);
-        movie.setActors(actors);
+    @Override
+    public void delete(int id) {
+        Movie movie = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
 
-        return repository.insert(movie);
+        repository.delete(movie);
     }
 }

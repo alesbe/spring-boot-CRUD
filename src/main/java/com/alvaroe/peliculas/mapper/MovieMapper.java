@@ -3,6 +3,7 @@ package com.alvaroe.peliculas.mapper;
 import com.alvaroe.peliculas.controller.model.movie.MovieCreateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieDetailWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
+import com.alvaroe.peliculas.controller.model.movie.MovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
@@ -22,6 +23,7 @@ public interface MovieMapper {
     MovieDetailWeb toMovieDetailWeb(Movie movie);
     MovieDetailWeb toMovieDetailWeb(MovieCreateWeb movieCreateWeb);
     Movie toMovie(MovieEntity movieEntity);
+    Movie toMovie(MovieUpdateWeb movieUpdateWeb);
     @Mapping(target = "director", ignore = true)
     @Mapping(target = "actors", ignore = true)
     Movie toMovie(MovieCreateWeb movieCreateWeb);
