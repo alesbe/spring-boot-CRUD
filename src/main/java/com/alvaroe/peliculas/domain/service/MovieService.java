@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
-    public List<Movie> getAll(Optional<Integer> page);
+    public List<Movie> getAll(Integer page, Integer pageSize);
+    public List<Movie> getAll();
     public Movie findById(int id);
     public int countAll();
+    public int insert(Movie movie);
 }

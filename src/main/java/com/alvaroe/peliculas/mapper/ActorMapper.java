@@ -10,9 +10,11 @@ import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Mapper(componentModel = "spring")
 public interface ActorMapper {
@@ -23,5 +25,11 @@ public interface ActorMapper {
     Actor toActor(ActorEntity actorEntity);
     ActorListWeb toActorListWeb(Actor actor);
     ActorDetailWeb toActorDetailWeb(Actor actor);
-    ActorEntity toActorEntity(ResultSet resultSet);
+    ActorEntity toActorEntity(Actor actor);
+
+    @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
+    @Mapping(target = "name", expression = "java(resultSet.getString(\"name\"))")
+    @Mapping(target = "birthYear", expression = "java(resultSet.getInt(\"birthYear\"))")
+    @Mapping(target = "deathYear", expression = "java(resultSet.getInt(\"deathYear\"))")
+    ActorEntity toActorEntity(ResultSet resultSet) throws SQLException;
 }

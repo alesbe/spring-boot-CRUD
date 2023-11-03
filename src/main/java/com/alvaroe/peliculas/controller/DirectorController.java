@@ -30,15 +30,16 @@ public class DirectorController {
 
     @Autowired
     DirectorService service;
-    private final int LIMIT = 10;
-
     @Value("${application.url}")
     private String urlBase;
 
+    @Value("${page.size}")
+    private int PAGE_SIZE;
+
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response getAll(@RequestParam(required = false) Integer page) {
-        List<Director> directors = (page != null) ? service.getAll(Optional.of(page)) : service.getAll(Optional.empty());
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        List<Director> directors = (page != null) ? service.getAll(page, pageSize) : service.getAll();
         List<DirectorListWeb> directorsWeb = directors.stream()
                 .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))
                 .toList();

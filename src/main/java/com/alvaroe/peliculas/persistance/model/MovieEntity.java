@@ -20,7 +20,6 @@ public class MovieEntity {
     private int directorId;
     private List<Integer> actorIds;
 
-
     public MovieEntity(int id, String title, int year, int runtime) {
         this.id = id;
         this.title = title;

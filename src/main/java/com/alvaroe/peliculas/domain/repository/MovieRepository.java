@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository {
-    public List<Movie> getAll(Optional<Integer> page);
-    public Movie findById(int id);
+    public List<Movie> getAll(Integer page, Integer pageSize);
+    public Optional<Movie> findById(int id);
     public int countAll();
+    public int insert(Movie movie);
 }

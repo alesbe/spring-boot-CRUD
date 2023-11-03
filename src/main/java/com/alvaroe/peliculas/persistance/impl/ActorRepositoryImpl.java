@@ -24,7 +24,6 @@ public class ActorRepositoryImpl implements ActorRepository {
 
     @Autowired
     ActorDAO actorDAO;
-    private final int LIMIT = 10;
 
     @Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
@@ -59,8 +58,7 @@ public class ActorRepositoryImpl implements ActorRepository {
     @Override
     public int insert(Actor actor) {
         try (Connection connection = DBUtil.open(true)) {
-            return actorDAO.insert(connection, actor);
-
+            return actorDAO.insert(connection, ActorMapper.mapper.toActorEntity(actor));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

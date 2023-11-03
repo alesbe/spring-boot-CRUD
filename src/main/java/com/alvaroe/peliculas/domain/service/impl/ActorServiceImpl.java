@@ -28,7 +28,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor findById(int id) {
-
         Actor actor = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
 

@@ -7,6 +7,7 @@ import com.alvaroe.peliculas.exception.ResourceNotFoundException;
 import com.alvaroe.peliculas.exception.SQLStatmentException;
 import com.alvaroe.peliculas.mapper.MovieMapper;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,9 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class MovieDAO {
-    private final int LIMIT = 10;
-
     public List<MovieEntity> getAll(Connection connection, Integer page, Integer pageSize) {
         List<Object> params = null;
         String sql = "SELECT * FROM movies";
@@ -66,5 +66,33 @@ public class MovieDAO {
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         }
+    }
+
+    public int insert(Connection connection, MovieEntity movieEntity) throws SQLException {
+        try {
+            List<Object> params = new ArrayList<>();
+            String SQL = "INSERT INTO movies (title, year, runtime, director_id) VALUES (?, ?, ?, ?)";
+
+            params.add(movieEntity.getTitle());
+            params.add(movieEntity.getYear());
+            params.add(movieEntity.getRuntime());
+            params.add(movieEntity.getDirectorId());
+
+            int movieId = DBUtil.insert(connection, SQL, params);
+
+            movieEntity.getActorIds().stream()
+                    .forEach(actorId -> addActor(connection, movieId, actorId));
+
+            connection.commit();
+            return movieId;
+        } catch (Exception e) {
+            connection.rollback();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addActor(Connection connection, int movieId, int actorId) {
+        String SQL = "INSERT INTO actors_movies (movie_id, actor_id) VALUES (?, ?)";
+        DBUtil.insert(connection, SQL, List.of(movieId, actorId));
     }
 }

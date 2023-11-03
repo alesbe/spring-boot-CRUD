@@ -41,8 +41,8 @@ public class ActorController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
-        pageSize = (pageSize != null)? pageSize : PAGE_SIZE;
-        List<Actor> actors = (page != null)? service.getAll(page, pageSize) : service.getAll();
+        pageSize = (pageSize != null) ? pageSize : PAGE_SIZE;
+        List<Actor> actors = (page != null) ? service.getAll(page, pageSize) : service.getAll();
         List<ActorListWeb> actorsWeb = actors.stream()
                 .map(actor -> ActorMapper.mapper.toActorListWeb(actor))
                 .toList();
@@ -57,6 +57,8 @@ public class ActorController {
         }
         return response;
     }
+
+
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")

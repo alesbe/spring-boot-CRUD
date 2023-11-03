@@ -16,13 +16,19 @@ public class DirectorServiceImpl implements DirectorService {
     DirectorRepository repository;
 
     @Override
-    public List<Director> getAll(Optional<Integer> page) {
-        return repository.getAll(page);
+    public List<Director> getAll(Integer page, Integer pageSize) {
+        return repository.getAll(page, pageSize);
+    }
+
+    @Override
+    public List<Director> getAll() {
+        return repository.getAll(null, null);
     }
 
     @Override
     public Director findById(int id) {
-        return repository.findById(id);
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + id));
     }
 
     @Override
@@ -37,20 +43,17 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public void update(Director director) {
-        Director existingDirector = repository.findById(director.getId());
-        if (existingDirector == null) {
-            throw new ResourceNotFoundException("Director not found with id: " + director.getId());
-        }
-        director.setId(existingDirector.getId());
+        repository.findById(director.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + director.getId()));
+
         repository.update(director);
     }
 
     @Override
     public void delete(int id) {
-        Director director = repository.findById(id);
-        if (director == null) {
-            throw new ResourceNotFoundException("Director not found with id: " + id);
-        }
+        repository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + id));
+
         repository.delete(id);
     }
 }

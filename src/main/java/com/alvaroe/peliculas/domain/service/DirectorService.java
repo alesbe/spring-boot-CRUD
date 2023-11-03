@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DirectorService {
-    public List<Director> getAll(Optional<Integer> page);
+    public List<Director> getAll(Integer page, Integer pageSize);
+    public List<Director> getAll();
     public Director findById(int id);
     public int create(Director director);
     public int countAll();

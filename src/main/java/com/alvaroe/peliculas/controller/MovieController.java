@@ -1,5 +1,6 @@
 package com.alvaroe.peliculas.controller;
 
+import com.alvaroe.peliculas.controller.model.movie.MovieCreateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.Movie;
@@ -32,8 +33,8 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    public Response getAll(@RequestParam(required = false) Integer page) {
-        List<Movie> movies = (page != null)? service.getAll(Optional.of(page)) : service.getAll(Optional.empty());
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        List<Movie> movies = (page != null) ? service.getAll(page, pageSize) : service.getAll();
         List<MovieListWeb> moviesWeb = movies.stream()
                 .map(movie -> MovieMapper.mapper.toMovieListWeb(movie))
                 .toList();
@@ -47,6 +48,16 @@ public class MovieController {
             response.paginate(page, totalRecords, urlBase);
         }
         return response;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
+        int id = service.insert(MovieMapper.mapper.toMovie(movieCreateWeb));
+
+        return Response.builder()
+                .data(MovieMapper.mapper.toMovieDetailWeb(movieCreateWeb))
+                .build();
     }
 
     @ResponseStatus(HttpStatus.OK)
