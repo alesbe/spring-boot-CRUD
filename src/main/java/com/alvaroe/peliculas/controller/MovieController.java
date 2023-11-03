@@ -53,10 +53,18 @@ public class MovieController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
-        int id = service.insert(MovieMapper.mapper.toMovie(movieCreateWeb));
+        int id = service.insert(
+                MovieMapper.mapper.toMovie(movieCreateWeb),
+                movieCreateWeb.getDirectorId(),
+                movieCreateWeb.getActorIds()
+        );
+
+        MovieListWeb movieListWeb = new MovieListWeb();
+        movieListWeb.setTitle(movieCreateWeb.getTitle());
+        movieListWeb.setId(id);
 
         return Response.builder()
-                .data(MovieMapper.mapper.toMovieDetailWeb(movieCreateWeb))
+                .data(movieListWeb)
                 .build();
     }
 

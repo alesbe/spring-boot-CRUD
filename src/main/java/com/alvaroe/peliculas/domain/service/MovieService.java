@@ -10,5 +10,5 @@ public interface MovieService {
     public List<Movie> getAll();
     public Movie findById(int id);
     public int countAll();
-    public int insert(Movie movie);
+    public int insert(Movie movie, Integer directorId, List<Integer> actorIds);
 }

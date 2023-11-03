@@ -1,6 +1,10 @@
 package com.alvaroe.peliculas.domain.service.impl;
 
+import com.alvaroe.peliculas.domain.entity.Actor;
+import com.alvaroe.peliculas.domain.entity.Director;
 import com.alvaroe.peliculas.domain.entity.Movie;
+import com.alvaroe.peliculas.domain.repository.ActorRepository;
+import com.alvaroe.peliculas.domain.repository.DirectorRepository;
 import com.alvaroe.peliculas.domain.service.MovieService;
 import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import com.alvaroe.peliculas.exception.ResourceNotFoundException;
@@ -14,6 +18,11 @@ import java.util.Optional;
 public class MovieServiceImpl implements MovieService {
     @Autowired
     MovieRepository repository;
+
+    @Autowired
+    DirectorRepository directorRepository;
+    @Autowired
+    ActorRepository actorRepository;
 
     public List<Movie> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
@@ -34,7 +43,17 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public int insert(Movie movie) {
+    public int insert(Movie movie, Integer directorId, List<Integer> actorIds) {
+        Director director = directorRepository.findById(directorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
+
+        List<Actor> actors = actorIds.stream()
+                .map(actorId -> actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
+                .toList();
+
+        movie.setDirector(director);
+        movie.setActors(actors);
+
         return repository.insert(movie);
     }
 }
