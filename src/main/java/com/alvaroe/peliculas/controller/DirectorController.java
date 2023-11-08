@@ -52,6 +52,7 @@ public class DirectorController {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        pageSize = (pageSize != null) ? pageSize : PAGE_SIZE;
         List<Director> directors = (page != null) ? service.getAll(page, pageSize) : service.getAll();
         List<DirectorListWeb> directorsWeb = directors.stream()
                 .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))

@@ -49,6 +49,7 @@ public class MovieController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        pageSize = (pageSize != null) ? pageSize : PAGE_SIZE;
         List<Movie> movies = (page != null) ? service.getAll(page, pageSize) : service.getAll();
         List<MovieListWeb> moviesWeb = movies.stream()
                 .map(movie -> MovieMapper.mapper.toMovieListWeb(movie))

@@ -97,12 +97,6 @@ public class MovieDAO {
     }
 
     public void update(Connection connection, MovieEntity movieEntity) {
-        System.out.println("r id: " + movieEntity.getId());
-        System.out.println("r actors: " + movieEntity.getActorIds());
-        System.out.println("r year: " + movieEntity.getYear());
-        System.out.println("r director: " + movieEntity.getDirectorId());
-        System.out.println("r title: " + movieEntity.getTitle());
-
         final String SQL = "UPDATE movies SET title = ?, year = ?, runtime = ?, director_id = ? WHERE id = ?";
 
         List<Object> params = new ArrayList<>();

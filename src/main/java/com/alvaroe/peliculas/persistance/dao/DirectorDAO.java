@@ -26,11 +26,11 @@ public class DirectorDAO {
         if(page != null) {
             int offset = (page - 1) * pageSize;
             SQL += " LIMIT ?, ?";
-            params = List.of(page, pageSize);
+            params = List.of(offset, pageSize);
         }
         List<DirectorEntity> directorEntities = new ArrayList<>();
         try {
-            ResultSet resultSet = DBUtil.select(connection, SQL, null);
+            ResultSet resultSet = DBUtil.select(connection, SQL, params);
             while (resultSet.next()) {
                 directorEntities.add(
                         DirectorMapper.mapper.toDirectorEntity(resultSet)
