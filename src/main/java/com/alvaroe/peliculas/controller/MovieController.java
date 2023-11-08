@@ -61,7 +61,7 @@ public class MovieController {
                 .build();
 
         if(page != null) {
-            response.paginate(page, totalRecords, urlBase);
+            response.paginate(page, pageSize, urlBase);
         }
         return response;
     }
