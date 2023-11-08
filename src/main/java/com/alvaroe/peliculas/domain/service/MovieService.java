@@ -15,7 +15,7 @@ public interface MovieService {
     public int countAll();
 
     // Update
-    public void update(Movie movie);
+    public void update(Movie movie, Integer directorId, List<Integer> actorIds);
 
     // Delete
     public void delete(int id);

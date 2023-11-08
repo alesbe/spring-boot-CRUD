@@ -24,6 +24,7 @@ public interface MovieMapper {
     MovieDetailWeb toMovieDetailWeb(MovieCreateWeb movieCreateWeb);
     Movie toMovie(MovieEntity movieEntity);
     Movie toMovie(MovieUpdateWeb movieUpdateWeb);
+
     @Mapping(target = "director", ignore = true)
     @Mapping(target = "actors", ignore = true)
     Movie toMovie(MovieCreateWeb movieCreateWeb);

@@ -75,7 +75,7 @@ public class MovieController {
     @PutMapping("/{id}")
     public void update(@PathVariable("id") int id, @RequestBody MovieUpdateWeb movieUpdateWeb) {
         movieUpdateWeb.setId(id);
-        service.update(MovieMapper.mapper.toMovie(movieUpdateWeb));
+        service.update(MovieMapper.mapper.toMovie(movieUpdateWeb), movieUpdateWeb.getDirectorId(), movieUpdateWeb.getActorIds());
     }
 
     @ResponseStatus(HttpStatus.OK)

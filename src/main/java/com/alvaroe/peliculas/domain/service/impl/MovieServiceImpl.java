@@ -58,9 +58,21 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void update(Movie movie) {
+    public void update(Movie movie, Integer directorId, List<Integer> actorIds) {
         repository.findById(movie.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + movie.getId()));
+
+        movie.setDirector(
+                directorRepository.findById(directorId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId))
+        );
+
+        movie.setActors(
+                actorIds.stream()
+                        .map(actorId -> actorRepository.findById(actorId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
+                        .toList()
+        );
 
         repository.update(movie);
     }
