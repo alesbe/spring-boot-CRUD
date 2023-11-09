@@ -32,6 +32,7 @@ public class ActorRepositoryImpl implements ActorRepository {
             List<Actor> actors = actorEntities.stream()
                     .map(actorEntity -> ActorMapper.mapper.toActor(actorEntity))
                     .toList();
+
             return actors;
 
         } catch (SQLException e) {

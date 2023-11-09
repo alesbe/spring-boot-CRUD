@@ -7,6 +7,8 @@ import com.alvaroe.peliculas.exception.ResourceNotFoundException;
 import com.alvaroe.peliculas.exception.SQLStatmentException;
 import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import com.alvaroe.peliculas.mapper.MovieMapper;
+import com.alvaroe.peliculas.persistance.dao.CharacterDAO;
+import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import com.alvaroe.peliculas.persistance.dao.MovieDAO;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Autowired
     MovieDAO movieDAO;
 
+    @Autowired
+    DirectorDAO directorDAO;
+
     @Override
     public List<Movie> getAll(Integer page, Integer pageSize) {
         try(Connection connection = DBUtil.open(true)) {
@@ -32,6 +37,7 @@ public class MovieRepositoryImpl implements MovieRepository {
                     .map(movie -> MovieMapper.mapper.toMovie(movie))
                     .toList();
 
+            connection.close();
             return movies;
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -44,9 +50,15 @@ public class MovieRepositoryImpl implements MovieRepository {
             Optional<MovieEntity> movieEntity = movieDAO.findById(connection, id);
 
             if(movieEntity.isEmpty()) {
+                connection.close();
                 return Optional.empty();
             }
 
+            movieEntity.get().getDirectorEntity(connection, directorDAO);
+
+            //movieEntity.get().getCharacters(connection, characterDAO);
+
+            connection.close();
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -56,6 +68,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int countAll() {
         try(Connection connection = DBUtil.open(true)) {
+            connection.close();
             return movieDAO.countAll(connection);
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -65,6 +78,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int insert(Movie movie) {
         try(Connection connection = DBUtil.open(false)) {
+            connection.close();
             return movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
         } catch (SQLException e){
             throw new RuntimeException(e);

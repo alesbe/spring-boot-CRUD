@@ -35,7 +35,6 @@ public class ActorDAO {
                 System.out.println(resultSet);
                 actorEntities.add(ActorMapper.mapper.toActorEntity(resultSet));
             }
-            DBUtil.close(connection);
             return actorEntities;
         } catch (SQLException e) {
             throw new RuntimeException();
@@ -47,10 +46,8 @@ public class ActorDAO {
         try {
             ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
             if(resultSet.next()) {
-                DBUtil.close(connection);
                 return Optional.of(ActorMapper.mapper.toActorEntity(resultSet));
             } else {
-                DBUtil.close(connection);
                 return Optional.empty();
             }
         } catch (SQLException e) {
@@ -66,7 +63,6 @@ public class ActorDAO {
             while (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
-            DBUtil.close(connection);
             return count;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
@@ -81,7 +77,6 @@ public class ActorDAO {
         params.add(actorEntity.getDeathYear());
 
         int id = DBUtil.insert(connection, SQL, params);
-        DBUtil.close(connection);
         return id;
     }
 
@@ -94,13 +89,11 @@ public class ActorDAO {
         params.add(actor.getDeathYear());
         params.add(actor.getId());
         DBUtil.update(connection, SQL, params);
-        DBUtil.close(connection);
     }
 
     public void delete(Connection connection, int id) {
         final String SQL = "DELETE FROM actors WHERE id = ?";
 
         DBUtil.delete(connection, SQL, List.of(id));
-        DBUtil.close(connection);
     }
 }

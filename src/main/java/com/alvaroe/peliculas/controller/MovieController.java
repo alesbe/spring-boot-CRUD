@@ -20,7 +20,7 @@ public class MovieController {
     public static final String MOVIES = "/movies";
 
     @Autowired
-    private MovieService service;
+    private MovieService movieService;
 
     @Value("${page.size}")
     private int PAGE_SIZE;
@@ -31,7 +31,7 @@ public class MovieController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
-        int id = service.create(
+        int id = movieService.create(
                 MovieMapper.mapper.toMovie(movieCreateWeb),
                 movieCreateWeb.getDirectorId(),
                 movieCreateWeb.getActorIds()
@@ -50,11 +50,11 @@ public class MovieController {
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
         pageSize = (pageSize != null) ? pageSize : PAGE_SIZE;
-        List<Movie> movies = (page != null) ? service.getAll(page, pageSize) : service.getAll();
+        List<Movie> movies = (page != null) ? movieService.getAll(page, pageSize) : movieService.getAll();
         List<MovieListWeb> moviesWeb = movies.stream()
                 .map(movie -> MovieMapper.mapper.toMovieListWeb(movie))
                 .toList();
-        int totalRecords = service.countAll();
+        int totalRecords = movieService.countAll();
         Response response = Response.builder()
                 .data(moviesWeb)
                 .totalRecords(totalRecords)
@@ -69,19 +69,19 @@ public class MovieController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Response find(@PathVariable("id") int id) {
-        return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(service.findById(id))).build();
+        return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movieService.findById(id))).build();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public void update(@PathVariable("id") int id, @RequestBody MovieUpdateWeb movieUpdateWeb) {
         movieUpdateWeb.setId(id);
-        service.update(MovieMapper.mapper.toMovie(movieUpdateWeb), movieUpdateWeb.getDirectorId(), movieUpdateWeb.getActorIds());
+        movieService.update(MovieMapper.mapper.toMovie(movieUpdateWeb), movieUpdateWeb.getDirectorId(), movieUpdateWeb.getActorIds());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("")
     public void delete(@PathVariable("id") int id) {
-        service.delete(id);
+        movieService.delete(id);
     }
 }

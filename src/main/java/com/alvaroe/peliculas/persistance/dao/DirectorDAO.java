@@ -57,6 +57,20 @@ public class DirectorDAO {
         }
     }
 
+    public Optional<DirectorEntity> findByMovieId(Connection connection, int movieId) {
+        final String SQL = "SELECT d.* FROM directors d INNER JOIN  movies m ON m.director_id = d.id WHERE m.id = ? LIMIT 1";
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(movieId));
+            if(resultSet.next()) {
+                return Optional.of(DirectorMapper.mapper.toDirectorEntity(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new SQLStatmentException("SQL: " + SQL);
+        }
+    }
+
     public int insert(Connection connection, DirectorEntity directorEntity) {
         List<Object> params = new ArrayList<>();
         final String SQL = "INSERT INTO directors (name, birthYear, deathYear) VALUES (?, ?, ?)";
@@ -78,7 +92,6 @@ public class DirectorDAO {
             while (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
-            DBUtil.close(connection);
             return count;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);

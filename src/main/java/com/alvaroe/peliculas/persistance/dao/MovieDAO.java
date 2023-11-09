@@ -42,7 +42,6 @@ public class MovieDAO {
         final String SQL = "SELECT * FROM movies WHERE id = ? LIMIT 1";
         try {
             ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
-            DBUtil.close(connection);
             if(resultSet.next()) {
                 return Optional.of(MovieMapper.mapper.toMovieEntity(resultSet));
             } else {
@@ -61,7 +60,6 @@ public class MovieDAO {
             while (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
-            DBUtil.close(connection);
             return count;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
@@ -76,12 +74,12 @@ public class MovieDAO {
             params.add(movieEntity.getTitle());
             params.add(movieEntity.getYear());
             params.add(movieEntity.getRuntime());
-            params.add(movieEntity.getDirectorId());
+            params.add(movieEntity.getDirectorEntity().getId());
 
             int movieId = DBUtil.insert(connection, SQL, params);
 
-            movieEntity.getActorIds().stream()
-                    .forEach(actorId -> addActor(connection, movieId, actorId));
+            /*movieEntity.getActorIds().stream()
+                    .forEach(actorId -> addActor(connection, movieId, actorId));*/
 
             connection.commit();
             return movieId;
@@ -103,7 +101,7 @@ public class MovieDAO {
         params.add(movieEntity.getTitle());
         params.add(movieEntity.getYear());
         params.add(movieEntity.getRuntime());
-        params.add(movieEntity.getDirectorId());
+        params.add(movieEntity.getDirectorEntity().getId());
         params.add(movieEntity.getId());
 
         DBUtil.update(connection, SQL, params);

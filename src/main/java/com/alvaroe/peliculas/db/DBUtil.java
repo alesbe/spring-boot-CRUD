@@ -90,6 +90,7 @@ public class DBUtil {
             }
             return preparedStatement;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
