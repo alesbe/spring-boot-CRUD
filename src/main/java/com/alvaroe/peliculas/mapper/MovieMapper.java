@@ -24,6 +24,8 @@ public interface MovieMapper {
     MovieListWeb toMovieListWeb(Movie movie);
     MovieDetailWeb toMovieDetailWeb(Movie movie);
     MovieDetailWeb toMovieDetailWeb(MovieCreateWeb movieCreateWeb);
+
+    @Mapping(target = "director", expression = "java(mapDirectorEntityToDirector(movieEntity.getDirectorEntity()))")
     Movie toMovie(MovieEntity movieEntity);
     Movie toMovie(MovieUpdateWeb movieUpdateWeb);
 
@@ -32,7 +34,6 @@ public interface MovieMapper {
     Movie toMovie(MovieCreateWeb movieCreateWeb);
 
     @Mapping(target = "directorEntity", expression = "java(mapDirectorToDirectorEntity(movie.getDirector()))")
-    @Mapping(target = "actorIds", expression = "java(mapActorsToActorIds(movie.getActors()))")
     MovieEntity toMovieEntity(Movie movie);
 
     default List<Integer> mapActorsToActorIds(List<Actor> actors) {
@@ -43,6 +44,10 @@ public interface MovieMapper {
 
     default DirectorEntity mapDirectorToDirectorEntity(Director director) {
         return DirectorMapper.mapper.toDirectorEntity(director);
+    }
+
+    default Director mapDirectorEntityToDirector(DirectorEntity directorEntity) {
+        return DirectorMapper.mapper.toDirector(directorEntity);
     }
 
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")

@@ -37,7 +37,6 @@ public class MovieRepositoryImpl implements MovieRepository {
                     .map(movie -> MovieMapper.mapper.toMovie(movie))
                     .toList();
 
-            connection.close();
             return movies;
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -50,7 +49,6 @@ public class MovieRepositoryImpl implements MovieRepository {
             Optional<MovieEntity> movieEntity = movieDAO.findById(connection, id);
 
             if(movieEntity.isEmpty()) {
-                connection.close();
                 return Optional.empty();
             }
 
@@ -58,7 +56,6 @@ public class MovieRepositoryImpl implements MovieRepository {
 
             //movieEntity.get().getCharacters(connection, characterDAO);
 
-            connection.close();
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -68,7 +65,6 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int countAll() {
         try(Connection connection = DBUtil.open(true)) {
-            connection.close();
             return movieDAO.countAll(connection);
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -78,7 +74,6 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int insert(Movie movie) {
         try(Connection connection = DBUtil.open(false)) {
-            connection.close();
             return movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
         } catch (SQLException e){
             throw new RuntimeException(e);

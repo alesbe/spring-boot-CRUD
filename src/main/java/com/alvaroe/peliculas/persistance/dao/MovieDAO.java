@@ -34,6 +34,7 @@ public class MovieDAO {
             }
             return movieEntities;
         } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
             throw new RuntimeException();
         }
     }
