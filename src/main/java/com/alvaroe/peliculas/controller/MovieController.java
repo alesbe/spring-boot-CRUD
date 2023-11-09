@@ -34,7 +34,7 @@ public class MovieController {
         int id = movieService.create(
                 MovieMapper.mapper.toMovie(movieCreateWeb),
                 movieCreateWeb.getDirectorId(),
-                movieCreateWeb.getActorIds()
+                movieCreateWeb.getCharacters()
         );
 
         MovieListWeb movieListWeb = new MovieListWeb();
@@ -76,7 +76,11 @@ public class MovieController {
     @PutMapping("/{id}")
     public void update(@PathVariable("id") int id, @RequestBody MovieUpdateWeb movieUpdateWeb) {
         movieUpdateWeb.setId(id);
-        movieService.update(MovieMapper.mapper.toMovie(movieUpdateWeb), movieUpdateWeb.getDirectorId(), movieUpdateWeb.getActorIds());
+        movieService.update(
+                MovieMapper.mapper.toMovie(movieUpdateWeb),
+                movieUpdateWeb.getDirectorId(),
+                movieUpdateWeb.getCharacters()
+        );
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -5,8 +5,10 @@ import com.alvaroe.peliculas.controller.model.movie.MovieDetailWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
+import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Director;
 import com.alvaroe.peliculas.domain.entity.Movie;
+import com.alvaroe.peliculas.persistance.model.CharacterMovieEntity;
 import com.alvaroe.peliculas.persistance.model.DirectorEntity;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.mapstruct.Mapper;
@@ -26,11 +28,11 @@ public interface MovieMapper {
     MovieDetailWeb toMovieDetailWeb(MovieCreateWeb movieCreateWeb);
 
     @Mapping(target = "director", expression = "java(mapDirectorEntityToDirector(movieEntity.getDirectorEntity()))")
+    @Mapping(target = "characterMovies", expression = "java(mapCharacterMovieEntitiesToCharacterMovies(movieEntity.getCharacterMovieEntities()))")
     Movie toMovie(MovieEntity movieEntity);
     Movie toMovie(MovieUpdateWeb movieUpdateWeb);
 
     @Mapping(target = "director", ignore = true)
-    @Mapping(target = "actors", ignore = true)
     Movie toMovie(MovieCreateWeb movieCreateWeb);
 
     @Mapping(target = "directorEntity", expression = "java(mapDirectorToDirectorEntity(movie.getDirector()))")
@@ -48,6 +50,14 @@ public interface MovieMapper {
 
     default Director mapDirectorEntityToDirector(DirectorEntity directorEntity) {
         return DirectorMapper.mapper.toDirector(directorEntity);
+    }
+
+    default List<CharacterMovie> mapCharacterMovieEntitiesToCharacterMovies(List<CharacterMovieEntity> characterMovieEntities) {
+        if(characterMovieEntities == null) return null;
+
+        return characterMovieEntities.stream()
+                .map(CharacterMovieMapper.mapper::toCharacterMovie)
+                .toList();
     }
 
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")

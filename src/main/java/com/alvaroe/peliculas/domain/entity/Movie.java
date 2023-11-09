@@ -17,6 +17,5 @@ public class Movie {
     private int year;
     private int runtime;
     private Director director;
-    private List<Actor> actors;
     private List<CharacterMovie> characterMovies;
 }

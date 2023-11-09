@@ -3,10 +3,11 @@ package com.alvaroe.peliculas.domain.service;
 import com.alvaroe.peliculas.domain.entity.Movie;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MovieService {
     // Create
-    public int create(Movie movie, Integer directorId, List<Integer> actorIds);
+    public int create(Movie movie, Integer directorId, Map<Integer, String> characters);
 
     // Read
     public List<Movie> getAll(Integer page, Integer pageSize);
@@ -15,7 +16,7 @@ public interface MovieService {
     public int countAll();
 
     // Update
-    public void update(Movie movie, Integer directorId, List<Integer> actorIds);
+    public void update(Movie movie, Integer directorId, Map<Integer, String> characters);
 
     // Delete
     public void delete(int id);

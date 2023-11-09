@@ -2,6 +2,7 @@ package com.alvaroe.peliculas.controller.model.movie;
 
 import com.alvaroe.peliculas.controller.model.actor.ActorListWeb;
 import com.alvaroe.peliculas.controller.model.director.DirectorListWeb;
+import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,5 +18,5 @@ public class MovieDetailWeb {
     private int year;
     private int runtime;
     private DirectorListWeb director;
-    private List<ActorListWeb> actors;
+    private List<CharacterMovie> characterMovies;
 }

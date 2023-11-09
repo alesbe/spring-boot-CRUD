@@ -2,12 +2,9 @@ package com.alvaroe.peliculas.persistance.impl;
 
 import com.alvaroe.peliculas.db.DBUtil;
 import com.alvaroe.peliculas.domain.entity.Movie;
-import com.alvaroe.peliculas.exception.DBConnectionException;
-import com.alvaroe.peliculas.exception.ResourceNotFoundException;
-import com.alvaroe.peliculas.exception.SQLStatmentException;
 import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import com.alvaroe.peliculas.mapper.MovieMapper;
-import com.alvaroe.peliculas.persistance.dao.CharacterDAO;
+import com.alvaroe.peliculas.persistance.dao.CharacterMovieDAO;
 import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import com.alvaroe.peliculas.persistance.dao.MovieDAO;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
@@ -15,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +23,9 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Autowired
     DirectorDAO directorDAO;
+
+    @Autowired
+    CharacterMovieDAO characterMovieDAO;
 
     @Override
     public List<Movie> getAll(Integer page, Integer pageSize) {
@@ -54,7 +52,7 @@ public class MovieRepositoryImpl implements MovieRepository {
 
             movieEntity.get().getDirectorEntity(connection, directorDAO);
 
-            //movieEntity.get().getCharacters(connection, characterDAO);
+            movieEntity.get().getCharacterMovieEntities(connection, characterMovieDAO);
 
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e){

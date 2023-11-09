@@ -55,6 +55,21 @@ public class ActorDAO {
         }
     }
 
+    public List<ActorEntity> findByCharacteMovierId(Connection connection, int characterMovieId) {
+        final String SQL = "SELECT * FROM actors_movies WHERE id = ? LIMIT 1";
+        List<ActorEntity> actorEntities = new ArrayList<>();
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(characterMovieId));
+            while(resultSet.next()) {
+                actorEntities.add(ActorMapper.mapper.toActorEntity(resultSet));
+            }
+
+            return actorEntities;
+        } catch (SQLException e) {
+            throw new SQLStatmentException("SQL: " + SQL);
+        }
+    }
+
     public int countAll(Connection connection) {
         String SQL = "SELECT COUNT(id) FROM actors";
         int count = 0;

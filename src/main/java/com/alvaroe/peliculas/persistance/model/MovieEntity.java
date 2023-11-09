@@ -1,6 +1,6 @@
 package com.alvaroe.peliculas.persistance.model;
 
-import com.alvaroe.peliculas.persistance.dao.CharacterDAO;
+import com.alvaroe.peliculas.persistance.dao.CharacterMovieDAO;
 import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,8 +20,7 @@ public class MovieEntity {
     private int year;
     private int runtime;
     private DirectorEntity directorEntity;
-    //private List<Integer> actorIds;
-    private List<CharacterMovieEntity> characters;
+    private List<CharacterMovieEntity> characterMovieEntities;
 
     public MovieEntity(int id, String title, int year, int runtime) {
         this.id = id;
@@ -36,5 +35,13 @@ public class MovieEntity {
         }
 
         return directorEntity;
+    }
+
+    public List<CharacterMovieEntity> getCharacterMovieEntities(Connection connection, CharacterMovieDAO characterMovieDAO) {
+        if(characterMovieEntities == null) {
+            this.characterMovieEntities = characterMovieDAO.findByMovieId(connection, id);
+        }
+
+        return characterMovieEntities;
     }
 }

@@ -1,6 +1,7 @@
 package com.alvaroe.peliculas.domain.service.impl;
 
 import com.alvaroe.peliculas.domain.entity.Actor;
+import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Director;
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.domain.repository.ActorRepository;
@@ -11,7 +12,9 @@ import com.alvaroe.peliculas.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -25,16 +28,27 @@ public class MovieServiceImpl implements MovieService {
     ActorRepository actorRepository;
 
     @Override
-    public int create(Movie movie, Integer directorId, List<Integer> actorIds) {
+    public int create(Movie movie, Integer directorId, Map<Integer, String> characters) {
         Director director = directorRepository.findById(directorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
 
-        List<Actor> actors = actorIds.stream()
-                .map(actorId -> actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
-                .toList();
+        List<CharacterMovie> characterMovies = new ArrayList<>();
+
+        characters.forEach((actorId, characterName) -> {
+            CharacterMovie characterMovie = new CharacterMovie();
+
+            characterMovie.setActor(
+                    actorRepository.findById(actorId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId))
+            );
+
+            characterMovie.setCharacterName(characterName);
+
+            characterMovies.add(characterMovie);
+        });
 
         movie.setDirector(director);
-        movie.setActors(actors);
+        movie.setCharacterMovies(characterMovies);
 
         return repository.insert(movie);
     }
@@ -58,21 +72,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void update(Movie movie, Integer directorId, List<Integer> actorIds) {
-        repository.findById(movie.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + movie.getId()));
+    public void update(Movie movie, Integer directorId, Map<Integer, String> characters) {
+        Director director = directorRepository.findById(directorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
 
-        movie.setDirector(
-                directorRepository.findById(directorId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId))
-        );
+        List<CharacterMovie> characterMovies = new ArrayList<>();
 
-        movie.setActors(
-                actorIds.stream()
-                        .map(actorId -> actorRepository.findById(actorId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)))
-                        .toList()
-        );
+        characters.forEach((actorId, characterName) -> {
+            CharacterMovie characterMovie = new CharacterMovie();
+
+            characterMovie.setActor(
+                    actorRepository.findById(actorId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId))
+            );
+
+            characterMovie.setCharacterName(characterName);
+
+            characterMovies.add(characterMovie);
+        });
+
+        movie.setDirector(director);
+        movie.setCharacterMovies(characterMovies);
 
         repository.update(movie);
     }
