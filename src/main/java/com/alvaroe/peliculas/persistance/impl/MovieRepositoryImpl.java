@@ -4,6 +4,7 @@ import com.alvaroe.peliculas.db.DBUtil;
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import com.alvaroe.peliculas.mapper.MovieMapper;
+import com.alvaroe.peliculas.persistance.dao.ActorDAO;
 import com.alvaroe.peliculas.persistance.dao.CharacterMovieDAO;
 import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import com.alvaroe.peliculas.persistance.dao.MovieDAO;
@@ -26,6 +27,9 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Autowired
     CharacterMovieDAO characterMovieDAO;
+
+    @Autowired
+    ActorDAO actorDAO;
 
     @Override
     public List<Movie> getAll(Integer page, Integer pageSize) {
@@ -53,6 +57,9 @@ public class MovieRepositoryImpl implements MovieRepository {
             movieEntity.get().getDirectorEntity(connection, directorDAO);
 
             movieEntity.get().getCharacterMovieEntities(connection, characterMovieDAO);
+
+            movieEntity.get().getCharacterMovieEntities()
+                    .forEach(characterMovieEntity -> characterMovieEntity.getActorEntity(connection, actorDAO));
 
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e){

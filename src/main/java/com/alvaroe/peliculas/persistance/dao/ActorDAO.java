@@ -2,13 +2,9 @@ package com.alvaroe.peliculas.persistance.dao;
 
 import com.alvaroe.peliculas.db.DBUtil;
 import com.alvaroe.peliculas.domain.entity.Actor;
-import com.alvaroe.peliculas.exception.DBConnectionException;
-import com.alvaroe.peliculas.exception.ResourceNotFoundException;
 import com.alvaroe.peliculas.exception.SQLStatmentException;
 import com.alvaroe.peliculas.mapper.ActorMapper;
-import com.alvaroe.peliculas.mapper.MovieMapper;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
-import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -55,16 +51,15 @@ public class ActorDAO {
         }
     }
 
-    public List<ActorEntity> findByCharacteMovierId(Connection connection, int characterMovieId) {
-        final String SQL = "SELECT * FROM actors_movies WHERE id = ? LIMIT 1";
-        List<ActorEntity> actorEntities = new ArrayList<>();
+    public ActorEntity findByCharacterMovieId(Connection connection, int characterMovieId) {
+        final String SQL = "SELECT a.* FROM actors_movies am JOIN actors a ON am.actor_id = a.id WHERE am.id = ? LIMIT 1;";
         try {
             ResultSet resultSet = DBUtil.select(connection, SQL, List.of(characterMovieId));
-            while(resultSet.next()) {
-                actorEntities.add(ActorMapper.mapper.toActorEntity(resultSet));
+            if(resultSet.next()) {
+                return ActorMapper.mapper.toActorEntity(resultSet);
+            } else {
+                return null;
             }
-
-            return actorEntities;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         }
