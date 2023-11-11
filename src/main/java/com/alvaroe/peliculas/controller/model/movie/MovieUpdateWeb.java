@@ -17,5 +17,5 @@ public class MovieUpdateWeb {
     private int year;
     private int runtime;
     private int directorId;
-    private Map<Integer, String> characters;
+    private List<Map<String, Object>> characters;
 }

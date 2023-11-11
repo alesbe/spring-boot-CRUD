@@ -79,23 +79,32 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void update(Movie movie, Integer directorId, Map<Integer, String> characters) {
+    public void update(Movie movie, Integer directorId, List<Map<String, Object>> characters) {
         Director director = directorRepository.findById(directorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
 
         List<CharacterMovie> characterMovies = new ArrayList<>();
 
-        characters.forEach((actorId, characterName) -> {
-            CharacterMovie characterMovie = new CharacterMovie();
+        characters.forEach(character -> {
+            character.forEach((actorId, characterName) -> {
+                CharacterMovie characterMovie = new CharacterMovie();
 
-            characterMovie.setActor(
-                    actorRepository.findById(actorId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId))
-            );
+                character.forEach((key, value) -> {
+                    switch (key) {
+                        case "actorId":
+                            characterMovie.setActor(actorRepository.findById((Integer) value)
+                                    .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + value)));
 
-            characterMovie.setCharacterName(characterName);
+                            break;
 
-            characterMovies.add(characterMovie);
+                        case "characterName":
+                            characterMovie.setCharacterName((String) value);
+                            break;
+                    }
+                });
+
+                characterMovies.add(characterMovie);
+            });
         });
 
         movie.setDirector(director);

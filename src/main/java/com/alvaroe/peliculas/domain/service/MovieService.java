@@ -16,7 +16,7 @@ public interface MovieService {
     public int countAll();
 
     // Update
-    public void update(Movie movie, Integer directorId, Map<Integer, String> characters);
+    public void update(Movie movie, Integer directorId, List<Map<String, Object>> characters);
 
     // Delete
     public void delete(int id);
