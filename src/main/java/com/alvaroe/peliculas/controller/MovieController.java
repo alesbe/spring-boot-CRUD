@@ -82,5 +82,9 @@ public class MovieController {
         );
     }
 
-
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id) {
+        movieService.delete(id);
+    }
 }
