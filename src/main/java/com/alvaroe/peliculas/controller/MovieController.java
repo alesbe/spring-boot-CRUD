@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(MovieController.MOVIES)
@@ -31,11 +32,9 @@ public class MovieController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
-        int id = movieService.create(
-                MovieMapper.mapper.toMovie(movieCreateWeb),
+        int id = movieService.create(MovieMapper.mapper.toMovie(movieCreateWeb),
                 movieCreateWeb.getDirectorId(),
-                movieCreateWeb.getCharacters()
-        );
+                movieCreateWeb.getCharacters());
 
         MovieListWeb movieListWeb = new MovieListWeb();
         movieListWeb.setTitle(movieCreateWeb.getTitle());

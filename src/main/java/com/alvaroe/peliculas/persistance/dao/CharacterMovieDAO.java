@@ -30,4 +30,25 @@ public class CharacterMovieDAO {
             throw new RuntimeException();
         }
     }
+
+    public void insertMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities, Integer movieId) throws SQLException {
+        final String SQL = "INSERT INTO actors_movies (movie_id, actor_id, characters) VALUES (?, ?, ?)";
+
+        try {
+            characterMovieEntities.forEach(character -> {
+                List<Object> params = new ArrayList<>();
+
+                params.add(movieId);
+                params.add(character.getActorEntity().getId());
+                params.add(character.getCharacterName());
+
+                DBUtil.insert(connection, SQL, params);
+            });
+
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw new RuntimeException("No se ha podido añadir personajes para la pelicula con el id: " + movieId);
+        }
+    }
 }

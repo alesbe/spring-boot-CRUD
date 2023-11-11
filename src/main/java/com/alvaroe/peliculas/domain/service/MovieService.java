@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface MovieService {
     // Create
-    public int create(Movie movie, Integer directorId, Map<Integer, String> characters);
+    public int create(Movie movie, Integer directorId, List<Map<String, Object>> characters);
 
     // Read
     public List<Movie> getAll(Integer page, Integer pageSize);

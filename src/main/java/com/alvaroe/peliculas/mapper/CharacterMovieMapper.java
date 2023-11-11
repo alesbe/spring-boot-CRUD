@@ -20,10 +20,17 @@ public interface CharacterMovieMapper {
     @Mapping(target = "characterName", expression = "java(resultSet.getString(\"characters\"))")
     CharacterMovieEntity toCharacterMovieEntity(ResultSet resultSet) throws SQLException;
 
+    @Mapping(target = "actorEntity", expression = "java(mapActorEntityToActor(characterMovie.getActor()))")
+    CharacterMovieEntity toCharacterMovieEntity(CharacterMovie characterMovie);
+
     @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterMovieEntity.getActorEntity()))")
     CharacterMovie toCharacterMovie(CharacterMovieEntity characterMovieEntity);
 
     default Actor mapActorEntityToActor(ActorEntity actorEntity) {
         return ActorMapper.mapper.toActor(actorEntity);
+    }
+
+    default ActorEntity mapActorEntityToActor(Actor actor) {
+        return ActorMapper.mapper.toActorEntity(actor);
     }
 }

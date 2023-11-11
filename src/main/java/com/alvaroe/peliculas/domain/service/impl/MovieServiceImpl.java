@@ -28,21 +28,28 @@ public class MovieServiceImpl implements MovieService {
     ActorRepository actorRepository;
 
     @Override
-    public int create(Movie movie, Integer directorId, Map<Integer, String> characters) {
+    public int create(Movie movie, Integer directorId, List<Map<String, Object>> characters) {
         Director director = directorRepository.findById(directorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Director not found with id: " + directorId));
 
         List<CharacterMovie> characterMovies = new ArrayList<>();
 
-        characters.forEach((actorId, characterName) -> {
+        characters.forEach(character -> {
             CharacterMovie characterMovie = new CharacterMovie();
 
-            characterMovie.setActor(
-                    actorRepository.findById(actorId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId))
-            );
+            character.forEach((key, value) -> {
+                switch (key) {
+                    case "actorId":
+                        characterMovie.setActor(actorRepository.findById((Integer) value)
+                                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + value)));
 
-            characterMovie.setCharacterName(characterName);
+                        break;
+
+                    case "characterName":
+                        characterMovie.setCharacterName((String) value);
+                        break;
+                }
+            });
 
             characterMovies.add(characterMovie);
         });

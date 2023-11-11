@@ -33,6 +33,7 @@ public interface MovieMapper {
     Movie toMovie(MovieUpdateWeb movieUpdateWeb);
 
     @Mapping(target = "director", ignore = true)
+    @Mapping(target = "characterMovies", ignore = true)
     Movie toMovie(MovieCreateWeb movieCreateWeb);
 
     @Mapping(target = "directorEntity", expression = "java(mapDirectorToDirectorEntity(movie.getDirector()))")

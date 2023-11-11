@@ -79,20 +79,11 @@ public class MovieDAO {
 
             int movieId = DBUtil.insert(connection, SQL, params);
 
-            /*movieEntity.getActorIds().stream()
-                    .forEach(actorId -> addActor(connection, movieId, actorId));*/
-
-            connection.commit();
             return movieId;
         } catch (Exception e) {
             connection.rollback();
             throw new RuntimeException(e);
         }
-    }
-
-    public void addActor(Connection connection, int movieId, int actorId) {
-        String SQL = "INSERT INTO actors_movies (movie_id, actor_id) VALUES (?, ?)";
-        DBUtil.insert(connection, SQL, List.of(movieId, actorId));
     }
 
     public void update(Connection connection, MovieEntity movieEntity) {
