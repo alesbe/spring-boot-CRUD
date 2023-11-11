@@ -95,6 +95,9 @@ public class MovieRepositoryImpl implements MovieRepository {
     public void update(Movie movie) {
         try(Connection connection = DBUtil.open(true)) {
             movieDAO.update(connection, MovieMapper.mapper.toMovieEntity(movie));
+
+            characterMovieDAO.updateMovieCharacters(connection,
+                    movie.getCharacterMovies().stream().map(CharacterMovieMapper.mapper::toCharacterMovieEntity).toList());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

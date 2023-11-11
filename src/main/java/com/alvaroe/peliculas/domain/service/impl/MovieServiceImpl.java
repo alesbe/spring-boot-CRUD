@@ -86,11 +86,14 @@ public class MovieServiceImpl implements MovieService {
         List<CharacterMovie> characterMovies = new ArrayList<>();
 
         characters.forEach(character -> {
-            character.forEach((actorId, characterName) -> {
-                CharacterMovie characterMovie = new CharacterMovie();
+            CharacterMovie characterMovie = new CharacterMovie();
 
+            character.forEach((actorId, characterName) -> {
                 character.forEach((key, value) -> {
                     switch (key) {
+                        case "id":
+                            characterMovie.setId((Integer) value);
+
                         case "actorId":
                             characterMovie.setActor(actorRepository.findById((Integer) value)
                                     .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + value)));
@@ -103,8 +106,9 @@ public class MovieServiceImpl implements MovieService {
                     }
                 });
 
-                characterMovies.add(characterMovie);
             });
+
+            characterMovies.add(characterMovie);
         });
 
         movie.setDirector(director);

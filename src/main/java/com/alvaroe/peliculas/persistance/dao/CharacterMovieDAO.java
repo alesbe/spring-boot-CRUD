@@ -31,6 +31,20 @@ public class CharacterMovieDAO {
         }
     }
 
+    public void updateMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities) {
+        final String SQL = "UPDATE actors_movies SET actor_id = ?, characters = ? WHERE id = ?";
+
+        characterMovieEntities.forEach(character -> {
+            List<Object> params = new ArrayList<>();
+
+            params.add(character.getActorEntity().getId());
+            params.add(character.getCharacterName());
+            params.add(character.getId());
+
+            DBUtil.update(connection, SQL, params);
+        });
+    }
+
     public void insertMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities, Integer movieId) throws SQLException {
         final String SQL = "INSERT INTO actors_movies (movie_id, actor_id, characters) VALUES (?, ?, ?)";
 
