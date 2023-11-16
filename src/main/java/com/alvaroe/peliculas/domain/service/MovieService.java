@@ -1,5 +1,6 @@
 package com.alvaroe.peliculas.domain.service;
 
+import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Movie;
 
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.Map;
 public interface MovieService {
     // Create
     public int create(Movie movie, Integer directorId, List<Map<String, Object>> characters);
+
+    public int addCharacter(Integer actorId, Integer movieId, CharacterMovie characterMovie);
+
+    public int addCharacters(Integer actorId, Integer movieId, List<CharacterMovie> characterMovies);
 
     // Read
     public List<Movie> getAll(Integer page, Integer pageSize);

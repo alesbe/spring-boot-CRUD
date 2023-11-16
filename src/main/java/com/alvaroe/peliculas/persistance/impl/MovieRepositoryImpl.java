@@ -1,6 +1,7 @@
 package com.alvaroe.peliculas.persistance.impl;
 
 import com.alvaroe.peliculas.db.DBUtil;
+import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Movie;
 import com.alvaroe.peliculas.domain.repository.MovieRepository;
 import com.alvaroe.peliculas.mapper.CharacterMovieMapper;
@@ -87,6 +88,17 @@ public class MovieRepositoryImpl implements MovieRepository {
 
             return movieId;
         } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int insertCharacter(CharacterMovie characterMovie, Integer movieId) {
+        try (Connection connection = DBUtil.open(true)) {
+            return characterMovieDAO.insert(connection,
+                    CharacterMovieMapper.mapper.toCharacterMovieEntity(characterMovie),
+                    movieId);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

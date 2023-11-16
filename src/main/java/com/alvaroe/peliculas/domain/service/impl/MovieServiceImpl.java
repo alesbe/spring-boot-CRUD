@@ -60,6 +60,22 @@ public class MovieServiceImpl implements MovieService {
         return repository.insert(movie);
     }
 
+    @Override
+    public int addCharacter(Integer actorId, Integer movieId, CharacterMovie characterMovie) {
+        Actor actor = actorRepository.findById(actorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId));
+
+        characterMovie.setActor(actor);
+
+        return repository.insertCharacter(characterMovie, movieId);
+    }
+
+    @Override
+    public int addCharacters(Integer actorId, Integer movieId, List<CharacterMovie> characterMovies) {
+        // todo
+        return 0;
+    }
+
     public List<Movie> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
     }
