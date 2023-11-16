@@ -1,5 +1,6 @@
 package com.alvaroe.peliculas.domain.service.impl;
 
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Director;
@@ -131,6 +132,19 @@ public class MovieServiceImpl implements MovieService {
         movie.setCharacterMovies(characterMovies);
 
         repository.update(movie);
+    }
+
+    @Override
+    public void updateCharacter(CharacterMovie characterMovie, int characterId, int actorId) {
+
+        repository.findCharacterById(characterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Character not found with id: " + characterId));
+
+        characterMovie.setId(characterId);
+        characterMovie.setActor(actorRepository.findById(actorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actorId)));
+
+        repository.updateCharacter(characterMovie);
     }
 
     @Override

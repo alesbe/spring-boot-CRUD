@@ -1,6 +1,7 @@
 package com.alvaroe.peliculas.controller;
 
 import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieCreateWeb;
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieUpdateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieCreateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieUpdateWeb;
@@ -89,19 +90,26 @@ public class MovieController {
         movieService.delete(id);
     }
 
+    //
     // CHARACTERS
-    /*@ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{movieId}/characters")
-    public void addCharacters(@PathVariable("movieId") int movieId, @RequestBody List<CharacterMovieCreateWeb> characterMovieCreateWebs) {
-        // todo
-    }*/
-
+    //
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{movieId}/characters")
     public Response addCharacter(@PathVariable("movieId") int movieId, @RequestBody CharacterMovieCreateWeb characterMovieCreateWeb) {
-        int characterId = movieService.addCharacter(characterMovieCreateWeb.getActorId(),
+        movieService.addCharacter(characterMovieCreateWeb.getActorId(),
                 movieId,
                 CharacterMovieMapper.mapper.toCharacterMovie(characterMovieCreateWeb));
+
+        return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movieService.findById(movieId))).build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{movieId}/characters/{characterId}")
+    public Response updateCharacter(@PathVariable("movieId") int movieId, @PathVariable("characterId") int characterId, @RequestBody CharacterMovieUpdateWeb characterMovieUpdateWeb) {
+        movieService.updateCharacter(
+                CharacterMovieMapper.mapper.toCharacterMovie(characterMovieUpdateWeb),
+                characterId,
+                characterMovieUpdateWeb.getActorId());
 
         return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movieService.findById(movieId))).build();
     }
@@ -111,4 +119,6 @@ public class MovieController {
     public void deleteCharacter(@PathVariable("movieId") int movieId, @PathVariable("characterId") int characterId) {
         movieService.deleteCharacter(characterId);
     }
+
+
 }

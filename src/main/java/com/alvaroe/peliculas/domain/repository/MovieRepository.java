@@ -22,6 +22,7 @@ public interface MovieRepository {
     public int insert(Movie movie);
     public int insertCharacter(CharacterMovie characterMovie, Integer movieId);
     public void update(Movie movie);
+    public void updateCharacter(CharacterMovie characterMovie);
     public void delete(Movie movie);
     public void deleteCharacter(CharacterMovie characterMovie);
 }

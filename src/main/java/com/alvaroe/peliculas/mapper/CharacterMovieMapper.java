@@ -1,6 +1,7 @@
 package com.alvaroe.peliculas.mapper;
 
 import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieCreateWeb;
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
@@ -28,6 +29,7 @@ public interface CharacterMovieMapper {
     CharacterMovie toCharacterMovie(CharacterMovieEntity characterMovieEntity);
 
     CharacterMovie toCharacterMovie(CharacterMovieCreateWeb characterMovieCreateWeb);
+    CharacterMovie toCharacterMovie(CharacterMovieUpdateWeb characterMovieUpdateWeb);
 
     default Actor mapActorEntityToActor(ActorEntity actorEntity) {
         return ActorMapper.mapper.toActor(actorEntity);

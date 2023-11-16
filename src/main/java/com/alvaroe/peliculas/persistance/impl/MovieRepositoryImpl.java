@@ -133,6 +133,15 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public void updateCharacter(CharacterMovie characterMovie) {
+        try(Connection connection = DBUtil.open(true)) {
+            characterMovieDAO.updateMovieCharacters(connection, List.of(CharacterMovieMapper.mapper.toCharacterMovieEntity(characterMovie)));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void delete(Movie movie) {
         try(Connection connection = DBUtil.open(true)) {
             movieDAO.delete(connection, MovieMapper.mapper.toMovieEntity(movie));

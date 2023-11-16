@@ -1,5 +1,6 @@
 package com.alvaroe.peliculas.domain.service;
 
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.domain.entity.Movie;
 
@@ -22,6 +23,7 @@ public interface MovieService {
 
     // Update
     public void update(Movie movie, Integer directorId, List<Map<String, Object>> characters);
+    public void updateCharacter(CharacterMovie characterMovie, int characterId, int actorId);
 
     // Delete
     public void delete(int id);
