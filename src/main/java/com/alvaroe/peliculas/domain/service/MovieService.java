@@ -25,4 +25,5 @@ public interface MovieService {
 
     // Delete
     public void delete(int id);
+    public void deleteCharacter(int characterId);
 }

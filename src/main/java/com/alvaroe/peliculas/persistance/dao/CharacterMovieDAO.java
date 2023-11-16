@@ -1,7 +1,10 @@
 package com.alvaroe.peliculas.persistance.dao;
 
 import com.alvaroe.peliculas.db.DBUtil;
+import com.alvaroe.peliculas.exception.SQLStatmentException;
+import com.alvaroe.peliculas.mapper.ActorMapper;
 import com.alvaroe.peliculas.mapper.CharacterMovieMapper;
+import com.alvaroe.peliculas.persistance.model.ActorEntity;
 import com.alvaroe.peliculas.persistance.model.CharacterMovieEntity;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CharacterMovieDAO {
@@ -28,6 +32,20 @@ public class CharacterMovieDAO {
             return characterMovieEntities;
         } catch (SQLException e) {
             throw new RuntimeException();
+        }
+    }
+
+    public Optional<CharacterMovieEntity> findById(Connection connection, int id) {
+        final String SQL = "SELECT * FROM actors_movies WHERE id = ? LIMIT 1";
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
+            if(resultSet.next()) {
+                return Optional.of(CharacterMovieMapper.mapper.toCharacterMovieEntity(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new SQLStatmentException("SQL: " + SQL);
         }
     }
 

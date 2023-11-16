@@ -10,6 +10,7 @@ import com.alvaroe.peliculas.persistance.dao.ActorDAO;
 import com.alvaroe.peliculas.persistance.dao.CharacterMovieDAO;
 import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import com.alvaroe.peliculas.persistance.dao.MovieDAO;
+import com.alvaroe.peliculas.persistance.model.CharacterMovieEntity;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -70,6 +71,22 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public Optional<CharacterMovie> findCharacterById(int id) {
+        try(Connection connection = DBUtil.open(true)) {
+            Optional<CharacterMovieEntity> characterMovieEntity = characterMovieDAO.findById(connection, id);
+
+            if(characterMovieEntity.isEmpty()) {
+                return Optional.empty();
+            }
+
+            return Optional.of(CharacterMovieMapper.mapper.toCharacterMovie(characterMovieEntity.get()));
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int countAll() {
         try(Connection connection = DBUtil.open(true)) {
             return movieDAO.countAll(connection);
@@ -119,6 +136,15 @@ public class MovieRepositoryImpl implements MovieRepository {
     public void delete(Movie movie) {
         try(Connection connection = DBUtil.open(true)) {
             movieDAO.delete(connection, MovieMapper.mapper.toMovieEntity(movie));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteCharacter(CharacterMovie characterMovie) {
+        try(Connection connection = DBUtil.open(true)) {
+            movieDAO.deleteCharacter(connection, CharacterMovieMapper.mapper.toCharacterMovieEntity(characterMovie));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

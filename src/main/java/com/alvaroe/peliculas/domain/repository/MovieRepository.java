@@ -17,9 +17,11 @@ import java.util.Optional;
 public interface MovieRepository {
     public List<Movie> getAll(Integer page, Integer pageSize);
     public Optional<Movie> findById(int id);
+    public Optional<CharacterMovie> findCharacterById(int id);
     public int countAll();
     public int insert(Movie movie);
     public int insertCharacter(CharacterMovie characterMovie, Integer movieId);
     public void update(Movie movie);
     public void delete(Movie movie);
+    public void deleteCharacter(CharacterMovie characterMovie);
 }

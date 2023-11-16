@@ -6,6 +6,7 @@ import com.alvaroe.peliculas.exception.DBConnectionException;
 import com.alvaroe.peliculas.exception.ResourceNotFoundException;
 import com.alvaroe.peliculas.exception.SQLStatmentException;
 import com.alvaroe.peliculas.mapper.MovieMapper;
+import com.alvaroe.peliculas.persistance.model.CharacterMovieEntity;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.stereotype.Component;
 
@@ -103,5 +104,11 @@ public class MovieDAO {
         final String SQL = "DELETE FROM movies WHERE id = ?";
 
         DBUtil.delete(connection, SQL, List.of(movieEntity.getId()));
+    }
+
+    public void deleteCharacter(Connection connection, CharacterMovieEntity characterMovieEntity) {
+        final String SQL = "DELETE FROM actors_movies WHERE id = ?";
+
+        DBUtil.delete(connection, SQL, List.of(characterMovieEntity.getId()));
     }
 }

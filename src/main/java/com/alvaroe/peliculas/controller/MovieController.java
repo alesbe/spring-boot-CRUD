@@ -108,7 +108,7 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{movieId}/characters/{characterId}")
-    public void deleteCharacter() {
-        // todo
+    public void deleteCharacter(@PathVariable("movieId") int movieId, @PathVariable("characterId") int characterId) {
+        movieService.deleteCharacter(characterId);
     }
 }

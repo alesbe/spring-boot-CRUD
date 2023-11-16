@@ -140,4 +140,12 @@ public class MovieServiceImpl implements MovieService {
 
         repository.delete(movie);
     }
+
+    @Override
+    public void deleteCharacter(int characterId) {
+        CharacterMovie characterMovie = repository.findCharacterById(characterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Character not found with id: " + characterId));
+
+        repository.deleteCharacter(characterMovie);
+    }
 }
