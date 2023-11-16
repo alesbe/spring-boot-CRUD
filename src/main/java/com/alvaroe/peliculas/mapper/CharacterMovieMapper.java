@@ -1,5 +1,6 @@
 package com.alvaroe.peliculas.mapper;
 
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieCreateWeb;
 import com.alvaroe.peliculas.domain.entity.Actor;
 import com.alvaroe.peliculas.domain.entity.CharacterMovie;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
@@ -25,6 +26,8 @@ public interface CharacterMovieMapper {
 
     @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterMovieEntity.getActorEntity()))")
     CharacterMovie toCharacterMovie(CharacterMovieEntity characterMovieEntity);
+
+    CharacterMovie toCharacterMovie(CharacterMovieCreateWeb characterMovieCreateWeb);
 
     default Actor mapActorEntityToActor(ActorEntity actorEntity) {
         return ActorMapper.mapper.toActor(actorEntity);

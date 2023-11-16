@@ -1,11 +1,15 @@
 package com.alvaroe.peliculas.controller;
 
+import com.alvaroe.peliculas.controller.model.characterMovie.CharacterMovieCreateWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieCreateWeb;
+import com.alvaroe.peliculas.controller.model.movie.MovieDetailWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieListWeb;
 import com.alvaroe.peliculas.controller.model.movie.MovieUpdateWeb;
 import com.alvaroe.peliculas.domain.entity.Movie;
+import com.alvaroe.peliculas.domain.service.CharacterMovieService;
 import com.alvaroe.peliculas.domain.service.MovieService;
 import com.alvaroe.peliculas.http_response.Response;
+import com.alvaroe.peliculas.mapper.CharacterMovieMapper;
 import com.alvaroe.peliculas.mapper.MovieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +26,9 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private CharacterMovieService characterMovieService;
 
     @Value("${page.size}")
     private int PAGE_SIZE;
@@ -86,5 +93,25 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
         movieService.delete(id);
+    }
+
+    // CHARACTERS
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{movieId}/characters")
+    public void addCharacters(@PathVariable("movieId") int movieId, @RequestBody List<CharacterMovieCreateWeb> characterMovieCreateWebs) {
+        // todo
+    }
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{movieId}/characters")
+    public Response addCharacter(@PathVariable("movieId") int movieId, @RequestBody CharacterMovieCreateWeb characterMovieCreateWeb) {
+        int characterId = characterMovieService.create(characterMovieCreateWeb.getActorId(),
+                movieId,
+                CharacterMovieMapper.mapper.toCharacterMovie(characterMovieCreateWeb));
+
+        return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movieService.findById(movieId))).build();
+    }
+
+    public void deleteCharacter() {
+        // todo
     }
 }

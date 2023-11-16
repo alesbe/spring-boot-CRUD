@@ -65,4 +65,17 @@ public class CharacterMovieDAO {
             throw new RuntimeException("No se ha podido añadir personajes para la pelicula con el id: " + movieId);
         }
     }
+
+    public int insert(Connection connection, CharacterMovieEntity characterMovieEntity, Integer movieId) throws SQLException {
+        List<Object> params = new ArrayList<>();
+        final String SQL = "INSERT INTO actors_movies(movie_id, actor_id, characters) VALUES (?, ?, ?)";
+
+        params.add(movieId);
+        params.add(characterMovieEntity.getActorEntity().getId());
+        params.add(characterMovieEntity.getCharacterName());
+
+        int id = DBUtil.insert(connection, SQL, params);
+
+        return id;
+    }
 }
