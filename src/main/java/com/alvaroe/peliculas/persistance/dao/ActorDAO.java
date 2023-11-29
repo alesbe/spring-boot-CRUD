@@ -16,6 +16,17 @@ import java.util.Optional;
 
 @Component
 public class ActorDAO {
+    public int insert(Connection connection, ActorEntity actorEntity) {
+        final String SQL = "INSERT INTO actors (name, birthYear, deathYear) VALUES (?, ?, ?)";
+        List<Object> params = new ArrayList<>();
+        params.add(actorEntity.getName());
+        params.add(actorEntity.getBirthYear());
+        params.add(actorEntity.getDeathYear());
+
+        int id = DBUtil.insert(connection, SQL, params);
+        return id;
+    }
+
     public List<ActorEntity> getAll(Connection connection, Integer page, Integer pageSize) {
         List<Object> params = null;
         String sql = "SELECT * FROM actors";
@@ -77,17 +88,6 @@ public class ActorDAO {
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         }
-    }
-
-    public int insert(Connection connection, ActorEntity actorEntity) {
-        final String SQL = "INSERT INTO actors (name, birthYear, deathYear) VALUES (?, ?, ?)";
-        List<Object> params = new ArrayList<>();
-        params.add(actorEntity.getName());
-        params.add(actorEntity.getBirthYear());
-        params.add(actorEntity.getDeathYear());
-
-        int id = DBUtil.insert(connection, SQL, params);
-        return id;
     }
 
     public void update(Connection connection, Actor actor) {

@@ -31,22 +31,6 @@ public class MovieController {
     @Value("${application.url}")
     private String urlBase;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
-    public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
-        int id = movieService.create(MovieMapper.mapper.toMovie(movieCreateWeb),
-                movieCreateWeb.getDirectorId(),
-                movieCreateWeb.getCharacters());
-
-        MovieListWeb movieListWeb = new MovieListWeb();
-        movieListWeb.setTitle(movieCreateWeb.getTitle());
-        movieListWeb.setId(id);
-
-        return Response.builder()
-                .data(movieListWeb)
-                .build();
-    }
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
@@ -71,6 +55,22 @@ public class MovieController {
     @GetMapping("/{id}")
     public Response find(@PathVariable("id") int id) {
         return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movieService.findById(id))).build();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Response create(@RequestBody MovieCreateWeb movieCreateWeb) {
+        int id = movieService.create(MovieMapper.mapper.toMovie(movieCreateWeb),
+                movieCreateWeb.getDirectorId(),
+                movieCreateWeb.getCharacters());
+
+        MovieListWeb movieListWeb = new MovieListWeb();
+        movieListWeb.setTitle(movieCreateWeb.getTitle());
+        movieListWeb.setId(id);
+
+        return Response.builder()
+                .data(movieListWeb)
+                .build();
     }
 
     @ResponseStatus(HttpStatus.OK)

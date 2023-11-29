@@ -71,12 +71,6 @@ public class MovieServiceImpl implements MovieService {
         return repository.insertCharacter(characterMovie, movieId);
     }
 
-    @Override
-    public int addCharacters(Integer actorId, Integer movieId, List<CharacterMovie> characterMovies) {
-        // todo
-        return 0;
-    }
-
     public List<Movie> getAll(Integer page, Integer pageSize) {
         return repository.getAll(page, pageSize);
     }

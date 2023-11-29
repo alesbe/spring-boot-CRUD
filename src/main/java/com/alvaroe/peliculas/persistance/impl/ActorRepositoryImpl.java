@@ -26,6 +26,15 @@ public class ActorRepositoryImpl implements ActorRepository {
     ActorDAO actorDAO;
 
     @Override
+    public int insert(Actor actor) {
+        try (Connection connection = DBUtil.open(true)) {
+            return actorDAO.insert(connection, ActorMapper.mapper.toActorEntity(actor));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
         try(Connection connection = DBUtil.open(true)) {
             List<ActorEntity> actorEntities = actorDAO.getAll(connection, page, pageSize);
@@ -51,15 +60,6 @@ public class ActorRepositoryImpl implements ActorRepository {
 
             return Optional.of(ActorMapper.mapper.toActor(actorEntity.get()));
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public int insert(Actor actor) {
-        try (Connection connection = DBUtil.open(true)) {
-            return actorDAO.insert(connection, ActorMapper.mapper.toActorEntity(actor));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

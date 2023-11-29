@@ -18,6 +18,16 @@ import java.util.List;
 public interface CharacterMovieMapper {
     CharacterMovieMapper mapper = Mappers.getMapper(CharacterMovieMapper.class);
 
+    // To web entities
+
+    // To domain entities
+    @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterMovieEntity.getActorEntity()))")
+    CharacterMovie toCharacterMovie(CharacterMovieEntity characterMovieEntity);
+
+    CharacterMovie toCharacterMovie(CharacterMovieCreateWeb characterMovieCreateWeb);
+    CharacterMovie toCharacterMovie(CharacterMovieUpdateWeb characterMovieUpdateWeb);
+
+    // To repository entities
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
     @Mapping(target = "characterName", expression = "java(resultSet.getString(\"characters\"))")
     CharacterMovieEntity toCharacterMovieEntity(ResultSet resultSet) throws SQLException;
@@ -25,12 +35,7 @@ public interface CharacterMovieMapper {
     @Mapping(target = "actorEntity", expression = "java(mapActorEntityToActor(characterMovie.getActor()))")
     CharacterMovieEntity toCharacterMovieEntity(CharacterMovie characterMovie);
 
-    @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterMovieEntity.getActorEntity()))")
-    CharacterMovie toCharacterMovie(CharacterMovieEntity characterMovieEntity);
-
-    CharacterMovie toCharacterMovie(CharacterMovieCreateWeb characterMovieCreateWeb);
-    CharacterMovie toCharacterMovie(CharacterMovieUpdateWeb characterMovieUpdateWeb);
-
+    // Utils
     default Actor mapActorEntityToActor(ActorEntity actorEntity) {
         return ActorMapper.mapper.toActor(actorEntity);
     }

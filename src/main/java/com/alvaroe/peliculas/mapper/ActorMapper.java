@@ -20,11 +20,16 @@ import java.sql.SQLException;
 public interface ActorMapper {
     ActorMapper mapper = Mappers.getMapper(ActorMapper.class);
 
+    // To web entities
+    ActorListWeb toActorListWeb(Actor actor);
+    ActorDetailWeb toActorDetailWeb(Actor actor);
+
+    // To domain entities
     Actor toActor(ActorCreateWeb actorCreateWeb);
     Actor toActor(ActorUpdateWeb actorUpdateWeb);
     Actor toActor(ActorEntity actorEntity);
-    ActorListWeb toActorListWeb(Actor actor);
-    ActorDetailWeb toActorDetailWeb(Actor actor);
+
+    // To repository entities
     ActorEntity toActorEntity(Actor actor);
 
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")

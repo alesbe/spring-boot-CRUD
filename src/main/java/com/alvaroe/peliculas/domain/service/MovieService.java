@@ -13,8 +13,6 @@ public interface MovieService {
 
     public int addCharacter(Integer actorId, Integer movieId, CharacterMovie characterMovie);
 
-    public int addCharacters(Integer actorId, Integer movieId, List<CharacterMovie> characterMovies);
-
     // Read
     public List<Movie> getAll(Integer page, Integer pageSize);
     public List<Movie> getAll();

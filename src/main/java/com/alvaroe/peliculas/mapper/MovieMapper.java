@@ -23,14 +23,15 @@ import java.util.List;
 public interface MovieMapper {
     MovieMapper mapper = Mappers.getMapper(MovieMapper.class);
 
+    // To web entities
     MovieListWeb toMovieListWeb(Movie movie);
     MovieDetailWeb toMovieDetailWeb(Movie movie);
     MovieDetailWeb toMovieDetailWeb(MovieCreateWeb movieCreateWeb);
 
+    // To domain entities
     @Mapping(target = "director", expression = "java(mapDirectorEntityToDirector(movieEntity.getDirectorEntity()))")
     @Mapping(target = "characterMovies", expression = "java(mapCharacterMovieEntitiesToCharacterMovies(movieEntity.getCharacterMovieEntities()))")
     Movie toMovie(MovieEntity movieEntity);
-
 
     Movie toMovie(MovieUpdateWeb movieUpdateWeb);
 
@@ -38,10 +39,18 @@ public interface MovieMapper {
     @Mapping(target = "characterMovies", ignore = true)
     Movie toMovie(MovieCreateWeb movieCreateWeb);
 
+    // To repository entities
     @Mapping(target = "directorEntity", expression = "java(mapDirectorToDirectorEntity(movie.getDirector()))")
     @Mapping(target = "characterMovieEntities", expression = "java(mapCharacterMoviesToCharacterMovieEntities(movie.getCharacterMovies()))")
     MovieEntity toMovieEntity(Movie movie);
 
+    @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
+    @Mapping(target = "title", expression = "java(resultSet.getString(\"title\"))")
+    @Mapping(target = "year", expression = "java(resultSet.getInt(\"year\"))")
+    @Mapping(target = "runtime", expression = "java(resultSet.getInt(\"runtime\"))")
+    MovieEntity toMovieEntity(ResultSet resultSet) throws SQLException;
+
+    // Utils
     default List<Integer> mapActorsToActorIds(List<Actor> actors) {
         return actors.stream()
                 .map(actor -> actor.getId())
@@ -71,10 +80,4 @@ public interface MovieMapper {
                 .map(CharacterMovieMapper.mapper::toCharacterMovieEntity)
                 .toList();
     }
-
-    @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
-    @Mapping(target = "title", expression = "java(resultSet.getString(\"title\"))")
-    @Mapping(target = "year", expression = "java(resultSet.getInt(\"year\"))")
-    @Mapping(target = "runtime", expression = "java(resultSet.getInt(\"runtime\"))")
-    MovieEntity toMovieEntity(ResultSet resultSet) throws SQLException;
 }

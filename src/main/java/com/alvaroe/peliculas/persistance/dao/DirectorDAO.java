@@ -20,6 +20,19 @@ import java.util.Optional;
 
 @Component
 public class DirectorDAO {
+    public int insert(Connection connection, DirectorEntity directorEntity) {
+        List<Object> params = new ArrayList<>();
+        final String SQL = "INSERT INTO directors (name, birthYear, deathYear) VALUES (?, ?, ?)";
+
+        params.add(directorEntity.getName());
+        params.add(directorEntity.getBirthYear());
+        params.add(directorEntity.getDeathYear());
+
+        int id = DBUtil.insert(connection, SQL, params);
+
+        return id;
+    }
+
     public List<DirectorEntity> getAll(Connection connection, Integer page, Integer pageSize) {
         List<Object> params = null;
         String SQL = "SELECT * FROM directors";
@@ -69,19 +82,6 @@ public class DirectorDAO {
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         }
-    }
-
-    public int insert(Connection connection, DirectorEntity directorEntity) {
-        List<Object> params = new ArrayList<>();
-        final String SQL = "INSERT INTO directors (name, birthYear, deathYear) VALUES (?, ?, ?)";
-
-        params.add(directorEntity.getName());
-        params.add(directorEntity.getBirthYear());
-        params.add(directorEntity.getDeathYear());
-
-        int id = DBUtil.insert(connection, SQL, params);
-
-        return id;
     }
 
     public int countAll(Connection connection) {

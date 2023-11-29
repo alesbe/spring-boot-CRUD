@@ -35,6 +35,31 @@ public class MovieRepositoryImpl implements MovieRepository {
     ActorDAO actorDAO;
 
     @Override
+    public int insert(Movie movie) {
+        try(Connection connection = DBUtil.open(false)) {
+            int movieId = movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
+            characterMovieDAO.insertMovieCharacters(connection,
+                    movie.getCharacterMovies().stream().map(CharacterMovieMapper.mapper::toCharacterMovieEntity).toList(),
+                    movieId);
+
+            return movieId;
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int insertCharacter(CharacterMovie characterMovie, Integer movieId) {
+        try (Connection connection = DBUtil.open(true)) {
+            return characterMovieDAO.insert(connection,
+                    CharacterMovieMapper.mapper.toCharacterMovieEntity(characterMovie),
+                    movieId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Movie> getAll(Integer page, Integer pageSize) {
         try(Connection connection = DBUtil.open(true)) {
             List<MovieEntity> movieEntities = movieDAO.getAll(connection, page, pageSize);
@@ -91,31 +116,6 @@ public class MovieRepositoryImpl implements MovieRepository {
         try(Connection connection = DBUtil.open(true)) {
             return movieDAO.countAll(connection);
         } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public int insert(Movie movie) {
-        try(Connection connection = DBUtil.open(false)) {
-            int movieId = movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
-            characterMovieDAO.insertMovieCharacters(connection,
-                    movie.getCharacterMovies().stream().map(CharacterMovieMapper.mapper::toCharacterMovieEntity).toList(),
-                    movieId);
-
-            return movieId;
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public int insertCharacter(CharacterMovie characterMovie, Integer movieId) {
-        try (Connection connection = DBUtil.open(true)) {
-            return characterMovieDAO.insert(connection,
-                    CharacterMovieMapper.mapper.toCharacterMovieEntity(characterMovie),
-                    movieId);
-        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

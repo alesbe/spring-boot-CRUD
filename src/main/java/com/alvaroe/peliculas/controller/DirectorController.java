@@ -36,19 +36,6 @@ public class DirectorController {
     @Value("${page.size}")
     private int PAGE_SIZE;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
-    public Response create(@RequestBody DirectorCreateWeb directorCreateWeb){
-        int id = service.create(DirectorMapper.mapper.toDirector(directorCreateWeb));
-        DirectorDetailWeb directorDetailWeb = new DirectorDetailWeb(
-                id,
-                directorCreateWeb.getName(),
-                directorCreateWeb.getBirthYear(),
-                directorCreateWeb.getDeathYear()
-        );
-        return Response.builder().data(directorDetailWeb).build();
-    }
-
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
@@ -74,6 +61,19 @@ public class DirectorController {
     @ResponseStatus(HttpStatus.OK)
     public Response find(@PathVariable("id") int id) {
         return Response.builder().data(DirectorMapper.mapper.toDirectorDetailWeb(service.findById(id))).build();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Response create(@RequestBody DirectorCreateWeb directorCreateWeb){
+        int id = service.create(DirectorMapper.mapper.toDirector(directorCreateWeb));
+        DirectorDetailWeb directorDetailWeb = new DirectorDetailWeb(
+                id,
+                directorCreateWeb.getName(),
+                directorCreateWeb.getBirthYear(),
+                directorCreateWeb.getDeathYear()
+        );
+        return Response.builder().data(directorDetailWeb).build();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

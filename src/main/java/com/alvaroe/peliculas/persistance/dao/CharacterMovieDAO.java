@@ -17,50 +17,17 @@ import java.util.Optional;
 
 @Component
 public class CharacterMovieDAO {
-    public List<CharacterMovieEntity> findByMovieId(Connection connection, int movieId) {
-        List<CharacterMovieEntity> characterMovieEntities = new ArrayList<>();
-        final String SQL = "SELECT c.* FROM actors_movies c INNER JOIN movies m ON m.id = c.movie_id AND m.id = ?";
+    public int insert(Connection connection, CharacterMovieEntity characterMovieEntity, Integer movieId) throws SQLException {
+        List<Object> params = new ArrayList<>();
+        final String SQL = "INSERT INTO actors_movies(movie_id, actor_id, characters) VALUES (?, ?, ?)";
 
-        try {
-            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(movieId));
-            if(!resultSet.next()) {
-                return null;
-            }
-            do {
-                characterMovieEntities.add(CharacterMovieMapper.mapper.toCharacterMovieEntity(resultSet));
-            } while (resultSet.next());
-            return characterMovieEntities;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
+        params.add(movieId);
+        params.add(characterMovieEntity.getActorEntity().getId());
+        params.add(characterMovieEntity.getCharacterName());
 
-    public Optional<CharacterMovieEntity> findById(Connection connection, int id) {
-        final String SQL = "SELECT * FROM actors_movies WHERE id = ? LIMIT 1";
-        try {
-            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
-            if(resultSet.next()) {
-                return Optional.of(CharacterMovieMapper.mapper.toCharacterMovieEntity(resultSet));
-            } else {
-                return Optional.empty();
-            }
-        } catch (SQLException e) {
-            throw new SQLStatmentException("SQL: " + SQL);
-        }
-    }
+        int id = DBUtil.insert(connection, SQL, params);
 
-    public void updateMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities) {
-        final String SQL = "UPDATE actors_movies SET actor_id = ?, characters = ? WHERE id = ?";
-
-        characterMovieEntities.forEach(character -> {
-            List<Object> params = new ArrayList<>();
-
-            params.add(character.getActorEntity().getId());
-            params.add(character.getCharacterName());
-            params.add(character.getId());
-
-            DBUtil.update(connection, SQL, params);
-        });
+        return id;
     }
 
     public void insertMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities, Integer movieId) throws SQLException {
@@ -84,16 +51,49 @@ public class CharacterMovieDAO {
         }
     }
 
-    public int insert(Connection connection, CharacterMovieEntity characterMovieEntity, Integer movieId) throws SQLException {
-        List<Object> params = new ArrayList<>();
-        final String SQL = "INSERT INTO actors_movies(movie_id, actor_id, characters) VALUES (?, ?, ?)";
+    public Optional<CharacterMovieEntity> findById(Connection connection, int id) {
+        final String SQL = "SELECT * FROM actors_movies WHERE id = ? LIMIT 1";
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
+            if(resultSet.next()) {
+                return Optional.of(CharacterMovieMapper.mapper.toCharacterMovieEntity(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new SQLStatmentException("SQL: " + SQL);
+        }
+    }
 
-        params.add(movieId);
-        params.add(characterMovieEntity.getActorEntity().getId());
-        params.add(characterMovieEntity.getCharacterName());
+    public List<CharacterMovieEntity> findByMovieId(Connection connection, int movieId) {
+        List<CharacterMovieEntity> characterMovieEntities = new ArrayList<>();
+        final String SQL = "SELECT c.* FROM actors_movies c INNER JOIN movies m ON m.id = c.movie_id AND m.id = ?";
 
-        int id = DBUtil.insert(connection, SQL, params);
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(movieId));
+            if(!resultSet.next()) {
+                return null;
+            }
+            do {
+                characterMovieEntities.add(CharacterMovieMapper.mapper.toCharacterMovieEntity(resultSet));
+            } while (resultSet.next());
+            return characterMovieEntities;
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 
-        return id;
+    public void updateMovieCharacters(Connection connection, List<CharacterMovieEntity> characterMovieEntities) {
+        final String SQL = "UPDATE actors_movies SET actor_id = ?, characters = ? WHERE id = ?";
+
+        characterMovieEntities.forEach(character -> {
+            List<Object> params = new ArrayList<>();
+
+            params.add(character.getActorEntity().getId());
+            params.add(character.getCharacterName());
+            params.add(character.getId());
+
+            DBUtil.update(connection, SQL, params);
+        });
     }
 }

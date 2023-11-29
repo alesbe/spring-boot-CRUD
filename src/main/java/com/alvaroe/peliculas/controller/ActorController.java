@@ -38,19 +38,6 @@ public class ActorController {
     @Value("${page.size}")
     private int PAGE_SIZE;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
-    public Response create(@RequestBody ActorCreateWeb actorCreateWeb){
-        int id = service.create(ActorMapper.mapper.toActor(actorCreateWeb));
-        ActorDetailWeb actorDetailWeb = new ActorDetailWeb(
-                id,
-                actorCreateWeb.getName(),
-                actorCreateWeb.getBirthYear(),
-                actorCreateWeb.getDeathYear()
-        );
-        return Response.builder().data(actorDetailWeb).build();
-    }
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
@@ -75,6 +62,19 @@ public class ActorController {
     @ResponseStatus(HttpStatus.OK)
     public Response find(@PathVariable("id") int id) {
         return Response.builder().data(ActorMapper.mapper.toActorDetailWeb(service.findById(id))).build();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Response create(@RequestBody ActorCreateWeb actorCreateWeb){
+        int id = service.create(ActorMapper.mapper.toActor(actorCreateWeb));
+        ActorDetailWeb actorDetailWeb = new ActorDetailWeb(
+                id,
+                actorCreateWeb.getName(),
+                actorCreateWeb.getBirthYear(),
+                actorCreateWeb.getDeathYear()
+        );
+        return Response.builder().data(actorDetailWeb).build();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

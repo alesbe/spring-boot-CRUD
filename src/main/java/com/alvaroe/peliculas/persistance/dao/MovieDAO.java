@@ -19,6 +19,25 @@ import java.util.Optional;
 
 @Component
 public class MovieDAO {
+    public int insert(Connection connection, MovieEntity movieEntity) throws SQLException {
+        try {
+            List<Object> params = new ArrayList<>();
+            String SQL = "INSERT INTO movies (title, year, runtime, director_id) VALUES (?, ?, ?, ?)";
+
+            params.add(movieEntity.getTitle());
+            params.add(movieEntity.getYear());
+            params.add(movieEntity.getRuntime());
+            params.add(movieEntity.getDirectorEntity().getId());
+
+            int movieId = DBUtil.insert(connection, SQL, params);
+
+            return movieId;
+        } catch (Exception e) {
+            connection.rollback();
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<MovieEntity> getAll(Connection connection, Integer page, Integer pageSize) {
         List<Object> params = null;
         String sql = "SELECT * FROM movies";
@@ -65,25 +84,6 @@ public class MovieDAO {
             return count;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
-        }
-    }
-
-    public int insert(Connection connection, MovieEntity movieEntity) throws SQLException {
-        try {
-            List<Object> params = new ArrayList<>();
-            String SQL = "INSERT INTO movies (title, year, runtime, director_id) VALUES (?, ?, ?, ?)";
-
-            params.add(movieEntity.getTitle());
-            params.add(movieEntity.getYear());
-            params.add(movieEntity.getRuntime());
-            params.add(movieEntity.getDirectorEntity().getId());
-
-            int movieId = DBUtil.insert(connection, SQL, params);
-
-            return movieId;
-        } catch (Exception e) {
-            connection.rollback();
-            throw new RuntimeException(e);
         }
     }
 

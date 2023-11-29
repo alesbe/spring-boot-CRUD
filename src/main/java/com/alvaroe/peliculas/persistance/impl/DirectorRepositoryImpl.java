@@ -27,6 +27,16 @@ public class DirectorRepositoryImpl implements DirectorRepository {
 
     @Autowired
     DirectorDAO directorDAO;
+
+    @Override
+    public int insert(Director director) {
+        try (Connection connection = DBUtil.open(true)) {
+            return directorDAO.insert(connection, DirectorMapper.mapper.toDirectorEntity(director));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Director> getAll(Integer page, Integer pageSize) {
         try (Connection connection = DBUtil.open(true)) {
             List<DirectorEntity> directorEntities = directorDAO.getAll(connection, page, pageSize);
@@ -40,7 +50,6 @@ public class DirectorRepositoryImpl implements DirectorRepository {
         }
     }
 
-
     @Override
     public Optional<Director> findById(int id) {
         try (Connection connection = DBUtil.open(true)) {
@@ -51,15 +60,6 @@ public class DirectorRepositoryImpl implements DirectorRepository {
             }
 
             return Optional.of(DirectorMapper.mapper.toDirector(directorEntity.get()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public int insert(Director director) {
-        try (Connection connection = DBUtil.open(true)) {
-            return directorDAO.insert(connection, DirectorMapper.mapper.toDirectorEntity(director));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
