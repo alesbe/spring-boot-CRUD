@@ -1,16 +1,16 @@
 package com.alvaroe.peliculas.persistance.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "actors")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActorEntity {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private int birthYear;

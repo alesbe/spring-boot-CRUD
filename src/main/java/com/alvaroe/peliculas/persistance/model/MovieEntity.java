@@ -2,19 +2,20 @@ package com.alvaroe.peliculas.persistance.model;
 
 import com.alvaroe.peliculas.persistance.dao.CharacterMovieDAO;
 import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.sql.Connection;
 import java.util.List;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "movies")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private int year;
