@@ -8,7 +8,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 public class DirectorEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
