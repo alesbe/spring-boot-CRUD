@@ -20,7 +20,13 @@ public class MovieEntity {
     private String title;
     private int year;
     private int runtime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
     private DirectorEntity directorEntity;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
     private List<CharacterMovieEntity> characterMovieEntities;
 
     public MovieEntity(int id, String title, int year, int runtime) {
@@ -29,7 +35,7 @@ public class MovieEntity {
         this.year = year;
         this.runtime = runtime;
     }
-
+/*
     public DirectorEntity getDirectorEntity(Connection connection, DirectorDAO directorDAO) {
         if(directorEntity == null) {
             this.directorEntity = directorDAO.findByMovieId(connection, id).orElse(null);
@@ -44,5 +50,5 @@ public class MovieEntity {
         }
 
         return characterMovieEntities;
-    }
+    }*/
 }
