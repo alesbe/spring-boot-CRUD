@@ -20,7 +20,7 @@ public class Response {
 
     private Object data;
 
-    private Integer totalRecords;
+    private long totalRecords;
 
     @JsonProperty("PaginationData")
     private Map<String, Object> pagination;

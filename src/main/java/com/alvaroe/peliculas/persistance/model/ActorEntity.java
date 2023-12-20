@@ -14,9 +14,9 @@ public class ActorEntity {
     private int id;
     private String name;
 
-    @Column(name = "birthyear")
-    private int birthYear;
+    @Column(name = "birthyear", nullable = true)
+    private Integer birthYear;
 
-    @Column(name = "deathyear")
+    @Column(name = "deathyear", nullable = true)
     private Integer deathYear;
 }

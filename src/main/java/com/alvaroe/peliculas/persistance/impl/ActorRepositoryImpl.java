@@ -24,19 +24,19 @@ public class ActorRepositoryImpl implements ActorRepository {
     @Autowired
     ActorDAO actorDAO;
 
-    /*@Override
+    @Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
         List<ActorEntity> actorEntities;
 
         if(page != null && page > 0) {
             Pageable pageable = PageRequest.of(page - 1, pageSize);
-            actorEntities = actorDAO.getAll(pageable).stream().toList();
+            actorEntities = actorDAO.findAll(pageable).stream().toList();
         } else {
-            actorEntities = actorDAO.getAll();
+            actorEntities = actorDAO.findAll();
         }
 
         return actorEntities.stream().map(ActorMapper.mapper::toActor).toList();
-    }*/
+    }
 
     @Override
     public Optional<Actor> findById(int id) {
@@ -52,14 +52,14 @@ public class ActorRepositoryImpl implements ActorRepository {
     /*@Override
     public int insert(Actor actor) {
         return actorDAO.save(ActorMapper.mapper.toActorEntity(actor)).getId();
-    }
+    }*/
 
     @Override
-    public int countAll() {
-        return actorDAO.countAll();
+    public long count() {
+        return actorDAO.count();
     }
 
-    @Override
+    /*@Override
     public void update(Actor actor) {
         actorDAO.save(ActorMapper.mapper.toActorEntity(actor));
     }

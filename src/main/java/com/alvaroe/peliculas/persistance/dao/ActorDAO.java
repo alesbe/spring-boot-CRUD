@@ -1,24 +1,19 @@
 package com.alvaroe.peliculas.persistance.dao;
 
-import com.alvaroe.peliculas.db.DBUtil;
-import com.alvaroe.peliculas.exception.SQLStatmentException;
-import com.alvaroe.peliculas.mapper.ActorMapper;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ActorDAO extends JpaRepository<ActorEntity, Integer> {
-    /*List<ActorEntity> getAll(Pageable pageable);
-    List<ActorEntity> getAll();*/
+    Page<ActorEntity> findAll(Pageable pageable);
+    List<ActorEntity> findAll();
     Optional<ActorEntity> findById(int id);
 /*
     public ActorEntity findByCharacterMovieId(Connection connection, int characterMovieId) {
@@ -34,7 +29,7 @@ public interface ActorDAO extends JpaRepository<ActorEntity, Integer> {
             throw new SQLStatmentException("SQL: " + SQL);
         }
     }*/
-    /*int countAll();
-    ActorEntity save(ActorEntity actorEntity);
+    long count();
+    /*ActorEntity save(ActorEntity actorEntity);
     void deleteById(int id);*/
 }

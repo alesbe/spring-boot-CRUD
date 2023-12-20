@@ -16,10 +16,10 @@ public class ActorServiceImpl implements ActorService {
     @Autowired
     ActorRepository repository;
 
-   /* @Override
+    /*@Override
     public int create (Actor actor) {
         return repository.insert(actor);
-    }
+    }*/
 
     @Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
@@ -29,7 +29,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public List<Actor> getAll() {
         return repository.getAll(null, null);
-    }*/
+    }
 
     @Override
     public Actor findById(int id) {
@@ -39,12 +39,12 @@ public class ActorServiceImpl implements ActorService {
         return actor;
     }
 
-    /*@Override
-    public int countAll() {
-        return repository.countAll();
+    @Override
+    public long count() {
+        return repository.count();
     }
 
-    @Override
+    /*@Override
     public void update(Actor actor) {
         repository.findById(actor.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actor.getId()));

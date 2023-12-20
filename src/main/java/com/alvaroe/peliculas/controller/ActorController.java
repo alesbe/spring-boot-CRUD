@@ -49,7 +49,7 @@ public class ActorController {
                 actorCreateWeb.getDeathYear()
         );
         return Response.builder().data(actorDetailWeb).build();
-    }
+    }*/
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
@@ -59,7 +59,7 @@ public class ActorController {
         List<ActorListWeb> actorsWeb = actors.stream()
                 .map(actor -> ActorMapper.mapper.toActorListWeb(actor))
                 .toList();
-        int totalRecords = service.countAll();
+        long totalRecords = service.count();
         Response response = Response.builder()
                 .data(actorsWeb)
                 .totalRecords(totalRecords)
@@ -69,7 +69,7 @@ public class ActorController {
             response.paginate(page, pageSize, urlBase);
         }
         return response;
-    }*/
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
