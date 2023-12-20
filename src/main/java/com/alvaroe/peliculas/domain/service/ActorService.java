@@ -9,17 +9,17 @@ import java.util.Optional;
 
 public interface ActorService {
     // Create
-    public int create(Actor actor);
+    /*public int create(Actor actor);
 
     // Read
     public List<Actor> getAll(Integer page, Integer pageSize);
-    public List<Actor> getAll();
+    public List<Actor> getAll();*/
     public Actor findById(int id);
-    public int countAll();
+    /*public int countAll();
 
     // Update
     public void update(Actor actor);
 
     // Delete
-    public void delete(int id);
+    public void delete(int id);*/
 }

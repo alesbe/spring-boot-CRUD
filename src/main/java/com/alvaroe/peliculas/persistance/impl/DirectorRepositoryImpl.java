@@ -13,6 +13,7 @@ import com.alvaroe.peliculas.persistance.dao.DirectorDAO;
 import com.alvaroe.peliculas.persistance.model.ActorEntity;
 import com.alvaroe.peliculas.persistance.model.DirectorEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 public class DirectorRepositoryImpl implements DirectorRepository {
 
     @Autowired

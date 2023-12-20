@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +17,10 @@ import java.util.Optional;
 
 @Repository
 public interface ActorDAO extends JpaRepository<ActorEntity, Integer> {
-    List<ActorEntity> findAll(Pageable pageable);
+    /*List<ActorEntity> getAll(Pageable pageable);
+    List<ActorEntity> getAll();*/
     Optional<ActorEntity> findById(int id);
-
+/*
     public ActorEntity findByCharacterMovieId(Connection connection, int characterMovieId) {
         final String SQL = "SELECT a.* FROM actors_movies am JOIN actors a ON am.actor_id = a.id WHERE am.id = ? LIMIT 1;";
         try {
@@ -32,8 +33,8 @@ public interface ActorDAO extends JpaRepository<ActorEntity, Integer> {
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         }
-    }
-    int countAll();
+    }*/
+    /*int countAll();
     ActorEntity save(ActorEntity actorEntity);
-    void delete(int id);
+    void deleteById(int id);*/
 }

@@ -13,6 +13,7 @@ import com.alvaroe.peliculas.persistance.dao.MovieDAO;
 import com.alvaroe.peliculas.persistance.model.CharacterMovieEntity;
 import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 public class MovieRepositoryImpl implements MovieRepository {
     @Autowired
     MovieDAO movieDAO;
@@ -56,13 +57,6 @@ public class MovieRepositoryImpl implements MovieRepository {
             if(movieEntity.isEmpty()) {
                 return Optional.empty();
             }
-
-            movieEntity.get().getDirectorEntity(connection, directorDAO);
-
-            movieEntity.get().getCharacterMovieEntities(connection, characterMovieDAO);
-
-            movieEntity.get().getCharacterMovieEntities()
-                    .forEach(characterMovieEntity -> characterMovieEntity.getActorEntity(connection, actorDAO));
 
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e){

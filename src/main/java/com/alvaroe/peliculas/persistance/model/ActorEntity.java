@@ -13,6 +13,10 @@ public class ActorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    @Column(name = "birthyear")
     private int birthYear;
+
+    @Column(name = "deathyear")
     private Integer deathYear;
 }

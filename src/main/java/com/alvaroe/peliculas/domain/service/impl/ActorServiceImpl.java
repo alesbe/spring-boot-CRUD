@@ -16,7 +16,7 @@ public class ActorServiceImpl implements ActorService {
     @Autowired
     ActorRepository repository;
 
-    @Override
+   /* @Override
     public int create (Actor actor) {
         return repository.insert(actor);
     }
@@ -29,7 +29,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public List<Actor> getAll() {
         return repository.getAll(null, null);
-    }
+    }*/
 
     @Override
     public Actor findById(int id) {
@@ -39,7 +39,7 @@ public class ActorServiceImpl implements ActorService {
         return actor;
     }
 
-    @Override
+    /*@Override
     public int countAll() {
         return repository.countAll();
     }
@@ -59,5 +59,5 @@ public class ActorServiceImpl implements ActorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
 
         repository.delete(id);
-    }
+    }*/
 }

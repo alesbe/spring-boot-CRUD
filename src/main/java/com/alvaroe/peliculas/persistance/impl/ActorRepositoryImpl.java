@@ -10,6 +10,7 @@ import com.alvaroe.peliculas.persistance.model.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -17,25 +18,25 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 public class ActorRepositoryImpl implements ActorRepository {
 
     @Autowired
     ActorDAO actorDAO;
 
-    @Override
+    /*@Override
     public List<Actor> getAll(Integer page, Integer pageSize) {
         List<ActorEntity> actorEntities;
 
         if(page != null && page > 0) {
             Pageable pageable = PageRequest.of(page - 1, pageSize);
-            actorEntities = actorDAO.findAll(pageable).stream().toList();
+            actorEntities = actorDAO.getAll(pageable).stream().toList();
         } else {
-            actorEntities = actorDAO.findAll();
+            actorEntities = actorDAO.getAll();
         }
 
         return actorEntities.stream().map(ActorMapper.mapper::toActor).toList();
-    }
+    }*/
 
     @Override
     public Optional<Actor> findById(int id) {
@@ -48,7 +49,7 @@ public class ActorRepositoryImpl implements ActorRepository {
         return Optional.of(ActorMapper.mapper.toActor(actorEntity.get()));
     }
 
-    @Override
+    /*@Override
     public int insert(Actor actor) {
         return actorDAO.save(ActorMapper.mapper.toActorEntity(actor)).getId();
     }
@@ -64,6 +65,6 @@ public class ActorRepositoryImpl implements ActorRepository {
     }
 
     public void delete(int id) {
-        actorDAO.delete(id);
-    }
+        actorDAO.deleteById(id);
+    }*/
 }

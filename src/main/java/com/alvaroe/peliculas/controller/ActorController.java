@@ -38,7 +38,7 @@ public class ActorController {
     @Value("${page.size}")
     private int PAGE_SIZE;
 
-    @ResponseStatus(HttpStatus.CREATED)
+    /*@ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public Response create(@RequestBody ActorCreateWeb actorCreateWeb){
         int id = service.create(ActorMapper.mapper.toActor(actorCreateWeb));
@@ -69,7 +69,7 @@ public class ActorController {
             response.paginate(page, pageSize, urlBase);
         }
         return response;
-    }
+    }*/
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -77,7 +77,7 @@ public class ActorController {
         return Response.builder().data(ActorMapper.mapper.toActorDetailWeb(service.findById(id))).build();
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    /*@ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void update(@PathVariable("id") int id, @RequestBody ActorUpdateWeb actorUpdateWeb) {
         actorUpdateWeb.setId(id);
@@ -88,5 +88,5 @@ public class ActorController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
         service.delete(id);
-    }
+    }*/
 }
